@@ -7,8 +7,20 @@ import { updateCategoryDTO } from './dto/category.dto';
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
-  getCategories() {
-    return this.prisma.category.findMany();
+  getCategories(name: string): Promise<Category[]> {
+    if (name) {
+      return this.prisma.category.findMany({
+        where: { name },
+      });
+    } else {
+      return this.prisma.category.findMany();
+    }
+  }
+
+  getCategoryById(id: number) {
+    return this.prisma.category.findUnique({
+      where: { id },
+    });
   }
 
   createCategory(data: Category): Promise<Category> {

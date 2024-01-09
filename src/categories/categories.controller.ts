@@ -4,9 +4,11 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { Category } from '@prisma/client';
@@ -17,8 +19,20 @@ export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
   @Get()
-  getCategories() {
-    return this.categoriesService.getCategories();
+  getCategories(@Query('name') name: string) {
+    return this.categoriesService.getCategories(name);
+  }
+
+  @Get(':id')
+  async getCategoryById(@Param('id') rawId: string) {
+    const id = Number(rawId);
+    if (isNaN(id)) {
+      throw new BadRequestException('Id must be a number.');
+    }
+
+    const category = await this.categoriesService.getCategoryById(id);
+    if (!category) throw new NotFoundException('Category does not exist');
+    return category;
   }
 
   @Post()
@@ -33,13 +47,13 @@ export class CategoriesController {
   ) {
     const id = Number(rawId);
     if (isNaN(id)) {
-      throw new BadRequestException('No category found.');
+      throw new BadRequestException('Id must be a number.');
     }
 
     try {
       return await this.categoriesService.updateCategory(id, data);
     } catch (error) {
-      throw new BadRequestException('Fields were not filled correctly.');
+      throw new NotFoundException('Category does not exist');
     }
   }
 
@@ -47,13 +61,13 @@ export class CategoriesController {
   async deleteCategory(@Param('id') rawId: string) {
     const id = Number(rawId);
     if (isNaN(id)) {
-      throw new BadRequestException('No category found.');
+      throw new BadRequestException('Id must be a number.');
     }
 
     try {
       return await this.categoriesService.deleteCategory(id);
     } catch (error) {
-      throw new BadRequestException('Fields were not filled correctly.');
+      throw new NotFoundException('Category does not exist');
     }
   }
 }
