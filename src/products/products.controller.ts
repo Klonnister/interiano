@@ -17,10 +17,8 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get()
-  async getProducts() {
-    const products = await this.productsService.getProducts();
-    if (!products.length) throw new NotFoundException('No products found.');
-    return products;
+  getProducts() {
+    return this.productsService.getProducts();
   }
 
   @Get(':id')
@@ -44,7 +42,7 @@ export class ProductsController {
   updateProduct(@Param('id') rawId: number, @Body() data: updateProductDTO) {
     const id = Number(rawId);
     if (isNaN(id)) {
-      throw new BadRequestException('Product search must be by id.');
+      throw new BadRequestException('Product update must be by id');
     }
 
     const product = this.productsService.updateProduct(id, data);
