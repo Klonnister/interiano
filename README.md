@@ -1,6 +1,6 @@
 ## Description
 
-Nest js project in development. I'll be creating an api where you'll be able to do all kind of http requests to create, update, get and delete products.
+Nest js project in development. I'll be creating an api where users will be able to do all kind of http requests to create, update, get and delete products.
 
 ## Installation
 
