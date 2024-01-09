@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
@@ -13,10 +14,14 @@ import {
 import { TrademarksService } from './trademarks.service';
 import { updateTrademarkDTO } from './dto/trademark.dto';
 import { Trademark } from '@prisma/client';
+import { ProductsService } from '../products/products.service';
 
 @Controller('trademarks')
 export class TrademarksController {
-  constructor(private trademarksService: TrademarksService) {}
+  constructor(
+    private trademarksService: TrademarksService,
+    private productsService: ProductsService,
+  ) {}
 
   @Get()
   getTrademarks(@Query('name') name: string) {
@@ -57,6 +62,15 @@ export class TrademarksController {
   async deleteTrademark(@Param('id') rawId: string) {
     const id = Number(rawId);
     if (isNaN(id)) throw new BadRequestException('Id must be a number.');
+
+    const trademarkProducts =
+      await this.productsService.getProductsByTrademark(id);
+
+    if (trademarkProducts.length) {
+      throw new ConflictException(
+        'Can not delete trademark when a product is associated with it.',
+      );
+    }
 
     try {
       return await this.trademarksService.deleteTrademark(id);

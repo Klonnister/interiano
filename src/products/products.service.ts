@@ -13,6 +13,14 @@ export class ProductsService {
     return this.prisma.product.findMany();
   }
 
+  getProductsByTrademark(trademark: number) {
+    return this.prisma.product.findMany({
+      where: {
+        trademark_id: trademark,
+      },
+    });
+  }
+
   getProductById(id: number): Promise<Product> {
     return this.prisma.product.findUnique({
       where: { id },
