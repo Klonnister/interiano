@@ -33,6 +33,7 @@ model Product {
   trademark    Trademark @relation(fields:[trademark_id], references:[id])
   trademark_id Int
   name         String
+  images       String
   line         String?
   components   String?
   size         String?
