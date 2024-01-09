@@ -13,10 +13,18 @@ export class ProductsService {
     return this.prisma.product.findMany();
   }
 
-  getProductsByTrademark(trademark: number) {
+  getProductsByTrademark(trademark_id: number) {
     return this.prisma.product.findMany({
       where: {
-        trademark_id: trademark,
+        trademark_id,
+      },
+    });
+  }
+
+  getProductsByCategory(category_id: number) {
+    return this.prisma.product.findMany({
+      where: {
+        category_id,
       },
     });
   }

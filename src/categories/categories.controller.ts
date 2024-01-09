@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
@@ -13,10 +14,14 @@ import {
 import { CategoriesService } from './categories.service';
 import { Category } from '@prisma/client';
 import { updateCategoryDTO } from './dto/category.dto';
+import { ProductsService } from '../products/products.service';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(
+    private categoriesService: CategoriesService,
+    private productsService: ProductsService,
+  ) {}
 
   @Get()
   getCategories(@Query('name') name: string) {
@@ -63,6 +68,12 @@ export class CategoriesController {
     if (isNaN(id)) {
       throw new BadRequestException('Id must be a number.');
     }
+
+    const products = await this.productsService.getProductsByCategory(id);
+    if (products.length)
+      throw new ConflictException(
+        'Can not delete category when a product is associated with it.',
+      );
 
     try {
       return await this.categoriesService.deleteCategory(id);
