@@ -17,12 +17,12 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get()
-  getProducts() {
+  getProducts(): Promise<Product[]> {
     return this.productsService.getProducts();
   }
 
   @Get(':id')
-  async getProductById(@Param('id') rawId: string) {
+  async getProductById(@Param('id') rawId: string): Promise<Product> {
     // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) {
@@ -35,12 +35,15 @@ export class ProductsController {
   }
 
   @Post()
-  createProduct(@Body() data: Product) {
+  createProduct(@Body() data: Product): Promise<Product> {
     return this.productsService.createProduct(data);
   }
 
   @Patch(':id')
-  updateProduct(@Param('id') rawId: number, @Body() data: updateProductDTO) {
+  updateProduct(
+    @Param('id') rawId: number,
+    @Body() data: updateProductDTO,
+  ): Promise<Product> {
     // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) {

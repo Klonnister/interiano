@@ -24,12 +24,12 @@ export class TrademarksController {
   ) {}
 
   @Get()
-  getTrademarks(@Query('name') name: string) {
+  getTrademarks(@Query('name') name: string): Promise<Trademark[]> {
     return this.trademarksService.getTrademarks(name);
   }
 
   @Get(':id')
-  async getTrademarkById(@Param('id') rawId: number) {
+  async getTrademarkById(@Param('id') rawId: number): Promise<Trademark> {
     // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) throw new BadRequestException('Id must be a number.');
@@ -40,7 +40,7 @@ export class TrademarksController {
   }
 
   @Post()
-  createTrademark(@Body() data: Trademark) {
+  createTrademark(@Body() data: Trademark): Promise<Trademark> {
     return this.trademarksService.createTrademark(data);
   }
 
@@ -48,7 +48,7 @@ export class TrademarksController {
   async updateTrademark(
     @Param('id') rawId: string,
     @Body() data: updateTrademarkDTO,
-  ) {
+  ): Promise<Trademark> {
     // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) throw new BadRequestException('Id must be a number.');
@@ -61,7 +61,7 @@ export class TrademarksController {
   }
 
   @Delete(':id')
-  async deleteTrademark(@Param('id') rawId: string) {
+  async deleteTrademark(@Param('id') rawId: string): Promise<Trademark> {
     // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) throw new BadRequestException('Id must be a number.');

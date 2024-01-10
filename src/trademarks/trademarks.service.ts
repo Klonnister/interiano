@@ -41,7 +41,7 @@ export class TrademarksService {
     });
   }
 
-  deleteTrademark(id: number) {
+  deleteTrademark(id: number): Promise<Trademark> {
     return this.prisma.trademark.delete({
       where: { id },
     });

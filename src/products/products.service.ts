@@ -13,7 +13,7 @@ export class ProductsService {
     return this.prisma.product.findMany();
   }
 
-  getProductsByTrademark(trademark_id: number) {
+  getProductsByTrademark(trademark_id: number): Promise<Product[]> {
     return this.prisma.product.findMany({
       where: {
         trademark_id,
@@ -21,7 +21,7 @@ export class ProductsService {
     });
   }
 
-  getProductsByCategory(category_id: number) {
+  getProductsByCategory(category_id: number): Promise<Product[]> {
     return this.prisma.product.findMany({
       where: {
         category_id,
@@ -46,7 +46,7 @@ export class ProductsService {
     });
   }
 
-  updateProduct(id: number, data: updateProductDTO) {
+  updateProduct(id: number, data: updateProductDTO): Promise<Product> {
     return this.prisma.product.update({
       where: { id },
       data,
