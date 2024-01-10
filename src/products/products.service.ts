@@ -52,4 +52,10 @@ export class ProductsService {
       data,
     });
   }
+
+  deleteProduct(id: number): Promise<Product> {
+    return this.prisma.product.delete({
+      where: { id },
+    });
+  }
 }

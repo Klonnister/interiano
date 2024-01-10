@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
@@ -57,5 +58,20 @@ export class ProductsController {
     }
 
     return product;
+  }
+
+  @Delete(':id')
+  async deleteProduct(@Param('id') rawId: number): Promise<Product> {
+    // Numeric id validation
+    const id = Number(rawId);
+    if (isNaN(id)) {
+      throw new BadRequestException('Id must be a number');
+    }
+
+    try {
+      return await this.productsService.deleteProduct(id);
+    } catch (error) {
+      throw new NotFoundException('Product does not exist.');
+    }
   }
 }

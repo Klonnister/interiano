@@ -28,7 +28,7 @@ export interface updateProductDTO {
 //   "category_id": 1,
 //   "trademark_id": 1,
 //   "name": "Shampoo Pantene Anticaída",
-//   "image": "Shampoo Pantene Anticaída",
+//   "images": "/123456.jpeg",
 //   "line": "Hidratación y fortalecimiento",
 //   "components": "Coco & Pepino",
 //   "size": "650 ml",
