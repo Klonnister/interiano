@@ -7,11 +7,15 @@ import { updateTrademarkDTO } from './dto/trademark.dto';
 export class TrademarksService {
   constructor(private prisma: PrismaService) {}
 
-  getTrademarks(name: string): Promise<Trademark[]> {
+  async getTrademarks(name: string): Promise<Trademark[]> {
     if (name) {
-      return this.prisma.trademark.findMany({
-        where: { name },
-      });
+      const nameQuery = `%${name}%`;
+      const trademarks = await this.prisma.$queryRaw<Trademark[]>`
+        SELECT * FROM Trademarks
+        WHERE name like ${nameQuery}
+      `;
+
+      return trademarks;
     } else {
       return this.prisma.trademark.findMany();
     }
