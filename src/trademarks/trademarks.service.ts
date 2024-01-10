@@ -9,6 +9,7 @@ export class TrademarksService {
 
   async getTrademarks(name: string): Promise<Trademark[]> {
     if (name) {
+      // SQL request by name
       const nameQuery = `%${name}%`;
       const trademarks = await this.prisma.$queryRaw<Trademark[]>`
         SELECT * FROM Trademarks

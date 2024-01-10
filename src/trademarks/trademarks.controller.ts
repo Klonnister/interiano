@@ -30,6 +30,7 @@ export class TrademarksController {
 
   @Get(':id')
   async getTrademarkById(@Param('id') rawId: number) {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) throw new BadRequestException('Id must be a number.');
 
@@ -48,6 +49,7 @@ export class TrademarksController {
     @Param('id') rawId: string,
     @Body() data: updateTrademarkDTO,
   ) {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) throw new BadRequestException('Id must be a number.');
 
@@ -60,9 +62,11 @@ export class TrademarksController {
 
   @Delete(':id')
   async deleteTrademark(@Param('id') rawId: string) {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) throw new BadRequestException('Id must be a number.');
 
+    // Product constraint validation
     const trademarkProducts =
       await this.productsService.getProductsByTrademark(id);
 
@@ -72,6 +76,7 @@ export class TrademarksController {
       );
     }
 
+    // Delete request
     try {
       return await this.trademarksService.deleteTrademark(id);
     } catch (error) {

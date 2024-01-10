@@ -30,6 +30,7 @@ export class CategoriesController {
 
   @Get(':id')
   async getCategoryById(@Param('id') rawId: string): Promise<Category> {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Id must be a number.');
@@ -50,6 +51,7 @@ export class CategoriesController {
     @Param('id') rawId: string,
     @Body() data: updateCategoryDTO,
   ): Promise<Category> {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Id must be a number.');
@@ -64,17 +66,20 @@ export class CategoriesController {
 
   @Delete(':id')
   async deleteCategory(@Param('id') rawId: string): Promise<Category> {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Id must be a number.');
     }
 
+    // Product constraint validation
     const products = await this.productsService.getProductsByCategory(id);
     if (products.length)
       throw new ConflictException(
         'Can not delete category when a product is associated with it.',
       );
 
+    // Delete request
     try {
       return await this.categoriesService.deleteCategory(id);
     } catch (error) {

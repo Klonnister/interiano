@@ -23,6 +23,7 @@ export class ProductsController {
 
   @Get(':id')
   async getProductById(@Param('id') rawId: string) {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Product search must be by id.');
@@ -40,13 +41,14 @@ export class ProductsController {
 
   @Patch(':id')
   updateProduct(@Param('id') rawId: number, @Body() data: updateProductDTO) {
+    // Numeric id validation
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Product update must be by id');
     }
 
+    // Update completed validation
     const product = this.productsService.updateProduct(id, data);
-
     if (!product) {
       throw new BadRequestException('Fields were not filled correctly');
     }

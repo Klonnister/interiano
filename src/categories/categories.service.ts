@@ -9,6 +9,7 @@ export class CategoriesService {
 
   async getCategories(name: string): Promise<Category[]> {
     if (name) {
+      //SQL request by name
       const nameQuery = `%${name}%`;
 
       const categories = await this.prisma.$queryRaw<Category[]>`
