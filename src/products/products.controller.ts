@@ -8,10 +8,16 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
 import { updateProductDTO } from './dto/product.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import { diskStorage } from 'multer';
 
 @Controller('products')
 export class ProductsController {
@@ -38,6 +44,31 @@ export class ProductsController {
   @Post()
   createProduct(@Body() data: Product): Promise<Product> {
     return this.productsService.createProduct(data);
+  }
+
+  @Post('images')
+  @UseInterceptors(
+    FileInterceptor('images', {
+      storage: diskStorage({
+        destination: './public/',
+        filename: async (req, file, cb) => {
+          //? Validate if public directory exists
+          const imageFolder = './public';
+          if (!existsSync(imageFolder)) {
+            await mkdir(imageFolder);
+          }
+
+          // create image name
+          const time = new Date().getTime();
+          const ext = file.originalname.slice(file.originalname.indexOf('.'));
+
+          return cb(null, `${time}${ext}`);
+        },
+      }),
+    }),
+  )
+  async saveProductImage(@UploadedFile() images: Express.Multer.File) {
+    return `/${images.filename}`;
   }
 
   @Patch(':id')

@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { updateProductDTO } from './dto/product.dto';
-// import { mkdir } from 'fs/promises';
-// import { existsSync } from 'fs';
 
 @Injectable()
 export class ProductsService {
@@ -36,11 +34,6 @@ export class ProductsService {
   }
 
   async createProduct(data: Product): Promise<Product> {
-    //? Images folder
-    // const imageFolder = './public';
-    // if (!existsSync(imageFolder)) {
-    //   await mkdir(imageFolder);
-    // }
     return this.prisma.product.create({
       data,
     });
