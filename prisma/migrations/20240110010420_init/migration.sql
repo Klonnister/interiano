@@ -3,6 +3,7 @@ CREATE TABLE `categories` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
 
+    FULLTEXT INDEX `categories_name_idx`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -11,6 +12,7 @@ CREATE TABLE `trademarks` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
 
+    FULLTEXT INDEX `trademarks_name_idx`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -20,6 +22,7 @@ CREATE TABLE `products` (
     `category_id` INTEGER NOT NULL,
     `trademark_id` INTEGER NOT NULL,
     `name` VARCHAR(191) NOT NULL,
+    `images` VARCHAR(191) NOT NULL,
     `line` VARCHAR(191) NULL,
     `components` VARCHAR(191) NULL,
     `size` VARCHAR(191) NULL,
@@ -28,6 +31,7 @@ CREATE TABLE `products` (
     `quantity` INTEGER NOT NULL,
     `price` DECIMAL(6, 2) NOT NULL,
 
+    FULLTEXT INDEX `products_name_idx`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
