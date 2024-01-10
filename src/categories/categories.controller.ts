@@ -24,12 +24,12 @@ export class CategoriesController {
   ) {}
 
   @Get()
-  getCategories(@Query('name') name: string) {
+  getCategories(@Query('name') name: string): Promise<Category[]> {
     return this.categoriesService.getCategories(name);
   }
 
   @Get(':id')
-  async getCategoryById(@Param('id') rawId: string) {
+  async getCategoryById(@Param('id') rawId: string): Promise<Category> {
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Id must be a number.');
@@ -41,7 +41,7 @@ export class CategoriesController {
   }
 
   @Post()
-  createCategory(@Body() data: Category) {
+  createCategory(@Body() data: Category): Promise<Category> {
     return this.categoriesService.createCategory(data);
   }
 
@@ -49,7 +49,7 @@ export class CategoriesController {
   async updateCategory(
     @Param('id') rawId: string,
     @Body() data: updateCategoryDTO,
-  ) {
+  ): Promise<Category> {
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Id must be a number.');
@@ -63,7 +63,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  async deleteCategory(@Param('id') rawId: string) {
+  async deleteCategory(@Param('id') rawId: string): Promise<Category> {
     const id = Number(rawId);
     if (isNaN(id)) {
       throw new BadRequestException('Id must be a number.');

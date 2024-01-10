@@ -7,17 +7,22 @@ import { updateCategoryDTO } from './dto/category.dto';
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
-  getCategories(name: string): Promise<Category[]> {
+  async getCategories(name: string): Promise<Category[]> {
     if (name) {
-      return this.prisma.category.findMany({
-        where: { name },
-      });
+      const nameQuery = `%${name}%`;
+
+      const categories = await this.prisma.$queryRaw<Category[]>`
+      SELECT * FROM Categories
+      WHERE name LIKE ${nameQuery}
+      `;
+
+      return categories;
     } else {
       return this.prisma.category.findMany();
     }
   }
 
-  getCategoryById(id: number) {
+  getCategoryById(id: number): Promise<Category> {
     return this.prisma.category.findUnique({
       where: { id },
     });
