@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   ConflictException,
   Controller,
@@ -7,6 +6,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -29,13 +29,9 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  async getCategoryById(@Param('id') rawId: string): Promise<Category> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) {
-      throw new BadRequestException('Id must be a number.');
-    }
-
+  async getCategoryById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Category> {
     const category = await this.categoriesService.getCategoryById(id);
     if (!category) throw new NotFoundException('Category does not exist');
     return category;
@@ -48,15 +44,9 @@ export class CategoriesController {
 
   @Patch(':id')
   async updateCategory(
-    @Param('id') rawId: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() data: updateCategoryDTO,
   ): Promise<Category> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) {
-      throw new BadRequestException('Id must be a number.');
-    }
-
     try {
       return await this.categoriesService.updateCategory(id, data);
     } catch (error) {
@@ -65,13 +55,9 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  async deleteCategory(@Param('id') rawId: string): Promise<Category> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) {
-      throw new BadRequestException('Id must be a number.');
-    }
-
+  async deleteCategory(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Category> {
     // Product constraint validation
     const products = await this.productsService.getProductsByCategory(id);
     if (products.length)

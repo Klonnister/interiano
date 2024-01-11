@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   ConflictException,
   Controller,
@@ -7,6 +6,7 @@ import {
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -29,11 +29,9 @@ export class TrademarksController {
   }
 
   @Get(':id')
-  async getTrademarkById(@Param('id') rawId: number): Promise<Trademark> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) throw new BadRequestException('Id must be a number.');
-
+  async getTrademarkById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Trademark> {
     const trademark = await this.trademarksService.getTrademarkById(id);
     if (!trademark) throw new NotFoundException('Trademark does not exist.');
     return trademark;
@@ -46,13 +44,9 @@ export class TrademarksController {
 
   @Patch(':id')
   async updateTrademark(
-    @Param('id') rawId: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() data: updateTrademarkDTO,
   ): Promise<Trademark> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) throw new BadRequestException('Id must be a number.');
-
     try {
       return await this.trademarksService.updateTrademark(id, data);
     } catch (error) {
@@ -61,11 +55,9 @@ export class TrademarksController {
   }
 
   @Delete(':id')
-  async deleteTrademark(@Param('id') rawId: string): Promise<Trademark> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) throw new BadRequestException('Id must be a number.');
-
+  async deleteTrademark(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Trademark> {
     // Product constraint validation
     const trademarkProducts =
       await this.productsService.getProductsByTrademark(id);

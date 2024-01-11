@@ -1,11 +1,11 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   UploadedFile,
@@ -29,13 +29,9 @@ export class ProductsController {
   }
 
   @Get(':id')
-  async getProductById(@Param('id') rawId: string): Promise<Product> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) {
-      throw new BadRequestException('Product search must be by id.');
-    }
-
+  async getProductById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Product> {
     const product = await this.productsService.getProductById(id);
     if (!product) throw new NotFoundException("Product doesn't exist");
     return product;
@@ -61,44 +57,35 @@ export class ProductsController {
           // create image name
           const time = new Date().getTime();
           const ext = file.originalname.slice(file.originalname.indexOf('.'));
+          const imageName = time + ext;
 
-          return cb(null, `${time}${ext}`);
+          return cb(null, imageName);
         },
       }),
     }),
   )
-  async saveProductImage(@UploadedFile() images: Express.Multer.File) {
+  async saveProductImage(
+    @UploadedFile() images: Express.Multer.File,
+  ): Promise<string> {
     return `/${images.filename}`;
   }
 
   @Patch(':id')
   updateProduct(
-    @Param('id') rawId: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() data: updateProductDTO,
   ): Promise<Product> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) {
-      throw new BadRequestException('Product update must be by id');
-    }
-
     // Update completed validation
     const product = this.productsService.updateProduct(id, data);
     if (!product) {
-      throw new BadRequestException('Fields were not filled correctly');
+      throw new NotFoundException('Product does not exist.');
     }
 
     return product;
   }
 
   @Delete(':id')
-  async deleteProduct(@Param('id') rawId: number): Promise<Product> {
-    // Numeric id validation
-    const id = Number(rawId);
-    if (isNaN(id)) {
-      throw new BadRequestException('Id must be a number');
-    }
-
+  async deleteProduct(@Param('id', ParseIntPipe) id: number): Promise<Product> {
     try {
       return await this.productsService.deleteProduct(id);
     } catch (error) {
