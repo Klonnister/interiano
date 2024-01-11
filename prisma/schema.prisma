@@ -32,15 +32,16 @@ model Product {
   category_id  Int
   trademark    Trademark @relation(fields:[trademark_id], references:[id])
   trademark_id Int
-  name         String
-  images       String
-  line         String?
+  title        String
   components   String?
+  images       String
   size         String?
   description  String?
-  extra_props  Json
-  quantity     Int
   price        Decimal @db.Decimal(6,2)
+  stock        Int     @default(1)
+  extra_props  Json
+  sale         Boolean @default(false)
+  sale_price   Decimal @db.Decimal(6,2) @default(0)
 
   @@map("products")
 }

@@ -1,17 +1,19 @@
-export interface createProductDTO {
+export class createProductDTO {
   category_id: number;
   trademark_id: number;
-  name: string;
-  line?: string;
+  title: string;
   components?: string;
+  images: string;
   size?: string;
   description?: string;
-  extra_props?: object;
-  quantity: number;
   price: number;
+  stock: number;
+  extra_props: object;
+  sale: boolean;
+  sale_price: number;
 }
 
-export interface updateProductDTO {
+export class updateProductDTO {
   category_id?: number;
   trademark_id?: number;
   name?: string;
@@ -27,15 +29,16 @@ export interface updateProductDTO {
 // {
 //   "category_id": 1,
 //   "trademark_id": 1,
-//   "name": "Shampoo Pantene Anticaída",
-//   "images": "/123456.jpeg",
-//   "line": "Hidratación y fortalecimiento",
+//   "title": "Anticaída y fortalecimiento desde las puntas",
 //   "components": "Coco & Pepino",
+//   "images": "/1705009444448.jpg",
 //   "size": "650 ml",
 //   "description": "El mejor shampoo para cabello dañado, nutre desde raíz a puntas y ayuda al fortalecimiento completo del cabello",
+//   "price": 80.52,
+//   "sale": false,
+//   "sale_price": 0,
+//   "stock": 2,
 //   "extra_props": {
 //     "tamaño": "Mediano"
-//   },
-//   "quantity": 2,
-//   "price": 80.52
+//   }
 // }
