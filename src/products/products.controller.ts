@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
-import { createProductDTO, updateProductDTO } from './dto/product.dto';
+import { productDTO } from './dto/product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
@@ -38,7 +38,7 @@ export class ProductsController {
   }
 
   @Post()
-  createProduct(@Body() data: createProductDTO): Promise<Product> {
+  createProduct(@Body() data: productDTO): Promise<Product> {
     return this.productsService.createProduct(data);
   }
 
@@ -73,7 +73,7 @@ export class ProductsController {
   @Patch(':id')
   updateProduct(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: updateProductDTO,
+    @Body() data: productDTO,
   ): Promise<Product> {
     // Update completed validation
     const product = this.productsService.updateProduct(id, data);
