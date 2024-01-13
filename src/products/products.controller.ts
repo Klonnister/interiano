@@ -85,6 +85,9 @@ export class ProductsController {
           return cb(null, imageName);
         },
       }),
+      limits: {
+        fileSize: 1000000,
+      },
     }),
   )
   async saveProductImage(
