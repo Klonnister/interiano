@@ -22,6 +22,14 @@ export class TrademarksService {
     }
   }
 
+  getTrademarksId() {
+    return this.prisma.trademark.findMany({
+      select: {
+        id: true,
+      },
+    });
+  }
+
   getTrademarkById(id: number): Promise<Trademark> {
     return this.prisma.trademark.findUnique({
       where: { id },

@@ -29,6 +29,14 @@ export class CategoriesService {
     });
   }
 
+  getCategoriesId(): Promise<{ id: number }[]> {
+    return this.prisma.category.findMany({
+      select: {
+        id: true,
+      },
+    });
+  }
+
   createCategory(data: Category): Promise<Category> {
     return this.prisma.category.create({
       data,

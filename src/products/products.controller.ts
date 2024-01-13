@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -18,10 +19,16 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { diskStorage } from 'multer';
+import { TrademarksService } from 'src/trademarks/trademarks.service';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private productsService: ProductsService) {}
+  constructor(
+    private productsService: ProductsService,
+    private trademarksService: TrademarksService,
+    private categoriesService: CategoriesService,
+  ) {}
 
   @Get()
   getProducts(): Promise<Product[]> {
@@ -38,7 +45,23 @@ export class ProductsController {
   }
 
   @Post()
-  createProduct(@Body() data: productDTO): Promise<Product> {
+  async createProduct(@Body() data: productDTO): Promise<Product> {
+    const categories = await this.categoriesService.getCategoriesId();
+    const categoryExists = categories.some((category) => {
+      return category.id === data.category_id;
+    });
+
+    if (!categoryExists)
+      throw new BadRequestException('Seleccione una categoría existente.');
+
+    const trademarks = await this.trademarksService.getTrademarksId();
+    const trademarkExists = trademarks.some((trademark) => {
+      return trademark.id === data.trademark_id;
+    });
+
+    if (!trademarkExists)
+      throw new BadRequestException('Seleccione una marca existente.');
+
     return this.productsService.createProduct(data);
   }
 
@@ -71,10 +94,26 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  updateProduct(
+  async updateProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: productDTO,
   ): Promise<Product> {
+    const categories = await this.categoriesService.getCategoriesId();
+    const categoryExists = categories.some((category) => {
+      return category.id === data.category_id;
+    });
+
+    if (!categoryExists)
+      throw new BadRequestException('Seleccione una categoría existente.');
+
+    const trademarks = await this.trademarksService.getTrademarksId();
+    const trademarkExists = trademarks.some((trademark) => {
+      return trademark.id === data.trademark_id;
+    });
+
+    if (!trademarkExists)
+      throw new BadRequestException('Seleccione una marca existente.');
+
     // Update completed validation
     const product = this.productsService.updateProduct(id, data);
     if (!product) {
