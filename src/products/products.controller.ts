@@ -13,6 +13,7 @@ import {
   Patch,
   Post,
   Query,
+  UnsupportedMediaTypeException,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -137,6 +138,16 @@ export class ProductsController {
           const time = new Date().getTime();
           const ext = file.originalname.slice(file.originalname.indexOf('.'));
           const imageName = time + ext;
+          const acceptedExts = ['.jpeg', '.jpg', '.png', '.webp', '.svg'];
+
+          if (!acceptedExts.includes(ext)) {
+            return cb(
+              new UnsupportedMediaTypeException(
+                'El archivo debe ser de tipo imagen.',
+              ),
+              null,
+            );
+          }
 
           return cb(null, imageName);
         },
