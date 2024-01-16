@@ -136,7 +136,9 @@ export class ProductsController {
 
           // create image name
           const time = new Date().getTime();
-          const ext = file.originalname.slice(file.originalname.indexOf('.'));
+          const ext = file.originalname.slice(
+            file.originalname.lastIndexOf('.'),
+          );
           const imageName = time + ext;
           const acceptedExts = ['.jpeg', '.jpg', '.png', '.webp', '.svg'];
 
