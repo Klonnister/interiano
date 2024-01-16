@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -31,8 +32,87 @@ export class ProductsController {
   ) {}
 
   @Get()
-  getProducts(): Promise<Product[]> {
-    return this.productsService.getProducts();
+  getProducts(
+    @Query('categories') categoriesString: string,
+    @Query('trademarks') trademarksString: string,
+    @Query('title') title: string,
+    @Query('components') components: string,
+    @Query('size') size: string,
+    @Query('priceMin') rawPriceMin: string,
+    @Query('priceMax') rawPriceMax: string,
+    @Query('sale') rawSale: string,
+  ): Promise<Product[]> {
+    // Array queries transformation
+    let categories: number[];
+    let trademarks: number[];
+
+    // number and boolean transformation
+    let priceMin: number;
+    let priceMax: number;
+    let sale: boolean;
+
+    if (rawPriceMin) {
+      priceMin = Number(rawPriceMin);
+      if (isNaN(priceMin))
+        throw new BadRequestException(
+          'Utilice valores numéricos para filtrar por precio.',
+        );
+    }
+
+    if (rawPriceMax) {
+      priceMax = Number(rawPriceMax);
+      if (isNaN(priceMax))
+        throw new BadRequestException(
+          'Utilice valores numéricos para filtrar por precio.',
+        );
+    }
+
+    if (rawSale) {
+      if (rawSale === 'true') {
+        sale = true;
+      } else if (rawSale === 'false') {
+        sale = false;
+      } else {
+        throw new BadRequestException(
+          'Utilice valor booleano para filtrar por oferta.',
+        );
+      }
+    }
+
+    if (categoriesString) {
+      categories = [];
+      categoriesString.split(',').forEach((category) => {
+        if (isNaN(Number(category)))
+          throw new BadRequestException(
+            'El parámetro category_id debe ser un array con valores numéricos',
+          );
+
+        categories.push(Number(category));
+      });
+    }
+
+    if (trademarksString) {
+      trademarks = [];
+      trademarksString.split(',').forEach((trademark) => {
+        if (isNaN(Number(trademark)))
+          throw new BadRequestException(
+            'El parámetro trademark_id debe ser un array con valores numéricos',
+          );
+
+        trademarks.push(Number(trademark));
+      });
+    }
+
+    return this.productsService.getProducts(
+      categories,
+      trademarks,
+      title,
+      components,
+      size,
+      priceMin,
+      priceMax,
+      sale,
+    );
   }
 
   @Get(':id')
@@ -40,7 +120,7 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Product> {
     const product = await this.productsService.getProductById(id);
-    if (!product) throw new NotFoundException("Product doesn't exist");
+    if (!product) throw new NotFoundException('Producto no encontrado.');
     return product;
   }
 
@@ -120,7 +200,7 @@ export class ProductsController {
     // Update completed validation
     const product = this.productsService.updateProduct(id, data);
     if (!product) {
-      throw new NotFoundException('Product does not exist.');
+      throw new NotFoundException('Producto no encontrado.');
     }
 
     return product;

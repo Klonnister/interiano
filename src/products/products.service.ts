@@ -7,8 +7,40 @@ import { productDTO } from './dto/product.dto';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  getProducts(): Promise<Product[]> {
-    return this.prisma.product.findMany();
+  async getProducts(
+    categories: number[],
+    trademarks: number[],
+    title: string,
+    components: string,
+    size: string,
+    priceMin: number,
+    priceMax: number,
+    sale: boolean,
+  ): Promise<Product[]> {
+    return this.prisma.product.findMany({
+      where: {
+        title: {
+          contains: title,
+        },
+        components: {
+          contains: components,
+        },
+        size: {
+          contains: size,
+        },
+        category_id: {
+          in: categories,
+        },
+        trademark_id: {
+          in: trademarks,
+        },
+        price: {
+          gte: priceMin,
+          lte: priceMax,
+        },
+        sale,
+      },
+    });
   }
 
   getProductsByTrademark(trademark_id: number): Promise<Product[]> {
