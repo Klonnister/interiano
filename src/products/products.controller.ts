@@ -92,15 +92,6 @@ export class ProductsController {
     );
   }
 
-  @Get(':id')
-  async getProductById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Product> {
-    const product = await this.productsService.getProductById(id);
-    if (!product) throw new NotFoundException('Producto no encontrado.');
-    return product;
-  }
-
   @Post()
   async createProduct(@Body() data: productDTO): Promise<Product> {
     const categories = await this.categoriesService.getCategoriesId();
@@ -163,6 +154,15 @@ export class ProductsController {
     @UploadedFile() images: Express.Multer.File,
   ): Promise<string> {
     return `/${images.filename}`;
+  }
+
+  @Get(':id')
+  async getProductById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Product> {
+    const product = await this.productsService.getProductById(id);
+    if (!product) throw new NotFoundException('Producto no encontrado.');
+    return product;
   }
 
   @Patch(':id')
