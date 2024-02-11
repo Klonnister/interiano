@@ -14,7 +14,8 @@ export class AuthService {
     });
   }
 
-  login() {
+  login(username: string) {
+    username;
     return 'login';
   }
 }
