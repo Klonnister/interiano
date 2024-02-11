@@ -46,4 +46,8 @@ export class AuthService {
       role: user.role,
     };
   }
+
+  async getProfile(username: string) {
+    console.log(username);
+  }
 }
