@@ -13,3 +13,8 @@ export class createUserDto {
   })
   password: string;
 }
+
+export interface Profile {
+  username: string;
+  role: string;
+}
