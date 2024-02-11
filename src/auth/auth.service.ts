@@ -48,6 +48,6 @@ export class AuthService {
   }
 
   async getProfile(username: string) {
-    console.log(username);
+    return this.usersService.getProfile(username);
   }
 }

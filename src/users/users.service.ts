@@ -22,4 +22,15 @@ export class UsersService {
       where: { username },
     });
   }
+
+  async getProfile(username: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+    });
+
+    return {
+      username: user.username,
+      role: user.role,
+    };
+  }
 }

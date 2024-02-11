@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from 'src/auth/dto/auth.dto';
 import { AuthGuard } from './guards/auth.guard';
+import { User } from '../users/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -19,7 +20,7 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(AuthGuard)
-  profile(@Body('username') username: string) {
+  profile(@User('username') username: string) {
     return this.authService.getProfile(username);
   }
 }
