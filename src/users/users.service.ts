@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { createUserDto } from 'src/shared/dto/user.dto';
+import { createUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -18,12 +18,6 @@ export class UsersService {
   }
 
   findUser(username: string): Promise<User> {
-    return this.prisma.user.findUnique({
-      where: { username },
-    });
-  }
-
-  findUserByEmail(username: string): Promise<User> {
     return this.prisma.user.findUnique({
       where: { username },
     });
