@@ -9,21 +9,18 @@ export class ValidProductPipe implements PipeTransform {
     private trademarksService: TrademarksService,
     private categoriesService: CategoriesService,
   ) {}
-  async transform(product: productDTO) {
-    const categories = await this.categoriesService.getCategoriesId();
-    const categoryExists = categories.some((category) => {
-      return category.id === product.category_id;
-    });
 
-    if (!categoryExists)
+  async transform(product: productDTO) {
+    const category = await this.categoriesService.getCategoryById(
+      product.category_id,
+    );
+    if (!category)
       throw new BadRequestException('Seleccione una categoría existente.');
 
-    const trademarks = await this.trademarksService.getTrademarksId();
-    const trademarkExists = trademarks.some((trademark) => {
-      return trademark.id === product.trademark_id;
-    });
-
-    if (!trademarkExists)
+    const trademark = await this.trademarksService.getTrademarkById(
+      product.trademark_id,
+    );
+    if (!trademark)
       throw new BadRequestException('Seleccione una marca existente.');
 
     return product;
