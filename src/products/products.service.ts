@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ProductsService {

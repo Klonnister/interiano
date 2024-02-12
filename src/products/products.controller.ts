@@ -1,15 +1,12 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
   ParseArrayPipe,
   ParseBoolPipe,
   ParseFloatPipe,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -24,17 +21,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { diskStorage } from 'multer';
-import { TrademarksService } from 'src/trademarks/trademarks.service';
-import { CategoriesService } from 'src/categories/categories.service';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { ValidProductPipe } from './pipes/valid-product.pipe';
+import { ExistentProductPipe } from './pipes/existent-product.pipe';
 
 @Controller('products')
 export class ProductsController {
-  constructor(
-    private productsService: ProductsService,
-    private trademarksService: TrademarksService,
-    private categoriesService: CategoriesService,
-  ) {}
+  constructor(private productsService: ProductsService) {}
 
   @Get()
   @Public()
@@ -95,36 +88,24 @@ export class ProductsController {
   }
 
   @Post()
-  async createProduct(@Body() data: productDTO): Promise<Product> {
-    const categories = await this.categoriesService.getCategoriesId();
-    const categoryExists = categories.some((category) => {
-      return category.id === data.category_id;
-    });
-
-    if (!categoryExists)
-      throw new BadRequestException('Seleccione una categoría existente.');
-
-    const trademarks = await this.trademarksService.getTrademarksId();
-    const trademarkExists = trademarks.some((trademark) => {
-      return trademark.id === data.trademark_id;
-    });
-
-    if (!trademarkExists)
-      throw new BadRequestException('Seleccione una marca existente.');
-
+  async createProduct(
+    @Body(ValidProductPipe) data: productDTO,
+  ): Promise<Product> {
     return this.productsService.createProduct(data);
   }
 
   @Post('images')
   @UseInterceptors(
     FileInterceptor('images', {
+      limits: {
+        fileSize: 1000000,
+      },
       storage: diskStorage({
         destination: './public/',
         filename: async (req, file, cb) => {
           //? Validate if public directory exists
-          const imageFolder = './public';
-          if (!existsSync(imageFolder)) {
-            await mkdir(imageFolder);
+          if (!existsSync('./public')) {
+            await mkdir('./public');
           }
 
           // create image name
@@ -147,9 +128,6 @@ export class ProductsController {
           return cb(null, imageName);
         },
       }),
-      limits: {
-        fileSize: 1000000,
-      },
     }),
   )
   async saveProductImage(
@@ -161,49 +139,23 @@ export class ProductsController {
   @Get(':id')
   @Public()
   async getProductById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ExistentProductPipe) id: number,
   ): Promise<Product> {
-    const product = await this.productsService.getProductById(id);
-    if (!product) throw new NotFoundException('Producto no encontrado.');
-    return product;
+    return await this.productsService.getProductById(id);
   }
 
   @Patch(':id')
   async updateProduct(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() data: productDTO,
+    @Param('id', ExistentProductPipe) id: number,
+    @Body(ValidProductPipe) data: productDTO,
   ): Promise<Product> {
-    const categories = await this.categoriesService.getCategoriesId();
-    const categoryExists = categories.some((category) => {
-      return category.id === data.category_id;
-    });
-
-    if (!categoryExists)
-      throw new BadRequestException('Seleccione una categoría existente.');
-
-    const trademarks = await this.trademarksService.getTrademarksId();
-    const trademarkExists = trademarks.some((trademark) => {
-      return trademark.id === data.trademark_id;
-    });
-
-    if (!trademarkExists)
-      throw new BadRequestException('Seleccione una marca existente.');
-
-    // Update completed validation
-    const product = this.productsService.updateProduct(id, data);
-    if (!product) {
-      throw new NotFoundException('Producto no encontrado.');
-    }
-
-    return product;
+    return await this.productsService.updateProduct(id, data);
   }
 
   @Delete(':id')
-  async deleteProduct(@Param('id', ParseIntPipe) id: number): Promise<Product> {
-    try {
-      return await this.productsService.deleteProduct(id);
-    } catch (error) {
-      throw new NotFoundException('Product does not exist.');
-    }
+  async deleteProduct(
+    @Param('id', ExistentProductPipe) id: number,
+  ): Promise<Product> {
+    return await this.productsService.deleteProduct(id);
   }
 }
