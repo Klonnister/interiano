@@ -8,24 +8,11 @@ export class TrademarksService {
   constructor(private prisma: PrismaService) {}
 
   async getTrademarks(name: string): Promise<Trademark[]> {
-    if (name) {
-      // SQL request by name
-      const nameQuery = `%${name}%`;
-      const trademarks = await this.prisma.$queryRaw<Trademark[]>`
-        SELECT * FROM Trademarks
-        WHERE name like ${nameQuery}
-      `;
-
-      return trademarks;
-    } else {
-      return this.prisma.trademark.findMany();
-    }
-  }
-
-  getTrademarksId() {
     return this.prisma.trademark.findMany({
-      select: {
-        id: true,
+      where: {
+        name: {
+          contains: name,
+        },
       },
     });
   }

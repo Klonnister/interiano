@@ -1,12 +1,9 @@
 import {
   Body,
-  ConflictException,
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -14,15 +11,13 @@ import {
 import { TrademarksService } from './trademarks.service';
 import { updateTrademarkDTO } from './dto/trademark.dto';
 import { Trademark } from '@prisma/client';
-import { ProductsService } from '../products/products.service';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { ExistentTrademarkPipe } from './pipes/existent-trademark.pipe';
+import { UnboundTrademarkPipe } from './pipes/unbound-trademark.pipe';
 
 @Controller('trademarks')
 export class TrademarksController {
-  constructor(
-    private trademarksService: TrademarksService,
-    private productsService: ProductsService,
-  ) {}
+  constructor(private trademarksService: TrademarksService) {}
 
   @Get()
   @Public()
@@ -33,11 +28,9 @@ export class TrademarksController {
   @Get(':id')
   @Public()
   async getTrademarkById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ExistentTrademarkPipe) id: number,
   ): Promise<Trademark> {
-    const trademark = await this.trademarksService.getTrademarkById(id);
-    if (!trademark) throw new NotFoundException('Trademark does not exist.');
-    return trademark;
+    return await this.trademarksService.getTrademarkById(id);
   }
 
   @Post()
@@ -47,35 +40,16 @@ export class TrademarksController {
 
   @Patch(':id')
   async updateTrademark(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ExistentTrademarkPipe) id: number,
     @Body() data: updateTrademarkDTO,
   ): Promise<Trademark> {
-    try {
-      return await this.trademarksService.updateTrademark(id, data);
-    } catch (error) {
-      throw new NotFoundException('Trademark does not exist.');
-    }
+    return await this.trademarksService.updateTrademark(id, data);
   }
 
   @Delete(':id')
   async deleteTrademark(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', UnboundTrademarkPipe) id: number,
   ): Promise<Trademark> {
-    // Product constraint validation
-    const trademarkProducts =
-      await this.productsService.getProductsByTrademark(id);
-
-    if (trademarkProducts.length) {
-      throw new ConflictException(
-        'Can not delete trademark when a product is associated with it.',
-      );
-    }
-
-    // Delete request
-    try {
-      return await this.trademarksService.deleteTrademark(id);
-    } catch (error) {
-      throw new NotFoundException('Trademark does not exist.');
-    }
+    return await this.trademarksService.deleteTrademark(id);
   }
 }
