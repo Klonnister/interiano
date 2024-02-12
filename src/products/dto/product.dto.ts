@@ -128,7 +128,7 @@ export class productDTO {
 // {
 //   "category_id": 1,
 //   "trademark_id": 1,
-//   "title": "Anticaída y fortalecimiento desde las puntas",
+//   "title": "Anticaída y fortalecimiento",
 //   "components": "Coco & Pepino",
 //   "images": "/1705009444448.jpg",
 //   "size": "650 ml",
