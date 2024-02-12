@@ -15,6 +15,7 @@ import { CategoriesService } from './categories.service';
 import { Category } from '@prisma/client';
 import { updateCategoryDTO } from './dto/category.dto';
 import { ProductsService } from '../products/products.service';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('categories')
 export class CategoriesController {
@@ -24,11 +25,13 @@ export class CategoriesController {
   ) {}
 
   @Get()
+  @Public()
   getCategories(@Query('name') name: string): Promise<Category[]> {
     return this.categoriesService.getCategories(name);
   }
 
   @Get(':id')
+  @Public()
   async getCategoryById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Category> {

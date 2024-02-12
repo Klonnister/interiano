@@ -26,6 +26,7 @@ import { existsSync } from 'fs';
 import { diskStorage } from 'multer';
 import { TrademarksService } from 'src/trademarks/trademarks.service';
 import { CategoriesService } from 'src/categories/categories.service';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('products')
 export class ProductsController {
@@ -36,6 +37,7 @@ export class ProductsController {
   ) {}
 
   @Get()
+  @Public()
   getProducts(
     @Query(
       'categories',
@@ -157,6 +159,7 @@ export class ProductsController {
   }
 
   @Get(':id')
+  @Public()
   async getProductById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Product> {

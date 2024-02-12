@@ -15,6 +15,7 @@ import { TrademarksService } from './trademarks.service';
 import { updateTrademarkDTO } from './dto/trademark.dto';
 import { Trademark } from '@prisma/client';
 import { ProductsService } from '../products/products.service';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('trademarks')
 export class TrademarksController {
@@ -24,11 +25,13 @@ export class TrademarksController {
   ) {}
 
   @Get()
+  @Public()
   getTrademarks(@Query('name') name: string): Promise<Trademark[]> {
     return this.trademarksService.getTrademarks(name);
   }
 
   @Get(':id')
+  @Public()
   async getTrademarkById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Trademark> {
