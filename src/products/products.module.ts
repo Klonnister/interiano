@@ -1,13 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
-import { CategoriesService } from 'src/categories/categories.service';
-import { TrademarksService } from 'src/trademarks/trademarks.service';
+import { TrademarksModule } from 'src/trademarks/trademarks.module';
+import { CategoriesModule } from 'src/categories/categories.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [
+    PrismaModule,
+    forwardRef(() => TrademarksModule),
+    forwardRef(() => CategoriesModule),
+  ],
   controllers: [ProductsController],
-  providers: [ProductsService, CategoriesService, TrademarksService],
+  providers: [ProductsService],
+  exports: [ProductsService],
 })
 export class ProductsModule {}
