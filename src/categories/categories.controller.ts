@@ -11,17 +11,13 @@ import {
 import { CategoriesService } from './categories.service';
 import { Category } from '@prisma/client';
 import { updateCategoryDTO } from './dto/category.dto';
-import { ProductsService } from '../products/products.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { ExistentCategoryPipe } from './pipes/existent-category.pipe';
 import { UnboundCategoryPipe } from './pipes/unbound-category.pipe';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(
-    private categoriesService: CategoriesService,
-    private productsService: ProductsService,
-  ) {}
+  constructor(private categoriesService: CategoriesService) {}
 
   @Get()
   @Public()
