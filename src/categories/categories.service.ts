@@ -8,32 +8,18 @@ export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
   async getCategories(name: string): Promise<Category[]> {
-    if (name) {
-      //SQL request by name
-      const nameQuery = `%${name}%`;
-
-      const categories = await this.prisma.$queryRaw<Category[]>`
-      SELECT * FROM Categories
-      WHERE name LIKE ${nameQuery}
-      `;
-
-      return categories;
-    } else {
-      return this.prisma.category.findMany();
-    }
+    return this.prisma.category.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+    });
   }
 
   getCategoryById(id: number): Promise<Category> {
     return this.prisma.category.findUnique({
       where: { id },
-    });
-  }
-
-  getCategoriesId(): Promise<{ id: number }[]> {
-    return this.prisma.category.findMany({
-      select: {
-        id: true,
-      },
     });
   }
 

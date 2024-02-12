@@ -1,12 +1,9 @@
 import {
   Body,
-  ConflictException,
   Controller,
   Delete,
   Get,
-  NotFoundException,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -16,6 +13,8 @@ import { Category } from '@prisma/client';
 import { updateCategoryDTO } from './dto/category.dto';
 import { ProductsService } from '../products/products.service';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { ExistentCategoryPipe } from './pipes/existent-category.pipe';
+import { UnboundCategoryPipe } from './pipes/unbound-category.pipe';
 
 @Controller('categories')
 export class CategoriesController {
@@ -33,11 +32,9 @@ export class CategoriesController {
   @Get(':id')
   @Public()
   async getCategoryById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ExistentCategoryPipe) id: number,
   ): Promise<Category> {
-    const category = await this.categoriesService.getCategoryById(id);
-    if (!category) throw new NotFoundException('Category does not exist');
-    return category;
+    return await this.categoriesService.getCategoryById(id);
   }
 
   @Post()
@@ -47,32 +44,16 @@ export class CategoriesController {
 
   @Patch(':id')
   async updateCategory(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ExistentCategoryPipe) id: number,
     @Body() data: updateCategoryDTO,
   ): Promise<Category> {
-    try {
-      return await this.categoriesService.updateCategory(id, data);
-    } catch (error) {
-      throw new NotFoundException('Category does not exist');
-    }
+    return await this.categoriesService.updateCategory(id, data);
   }
 
   @Delete(':id')
   async deleteCategory(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', UnboundCategoryPipe) id: number,
   ): Promise<Category> {
-    // Product constraint validation
-    const products = await this.productsService.getProductsByCategory(id);
-    if (products.length)
-      throw new ConflictException(
-        'Can not delete category when a product is associated with it.',
-      );
-
-    // Delete request
-    try {
-      return await this.categoriesService.deleteCategory(id);
-    } catch (error) {
-      throw new NotFoundException('Category does not exist');
-    }
+    return await this.categoriesService.deleteCategory(id);
   }
 }
