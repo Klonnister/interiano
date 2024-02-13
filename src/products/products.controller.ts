@@ -102,13 +102,15 @@ export class ProductsController {
         fileSize: 1000000,
       },
       storage: diskStorage({
-        destination: './public/product-imgs/',
-        filename: async (req, file, cb) => {
-          //? Validate if public directory exists
+        destination: async (req, file, cb) => {
+          // Validate if public directory exists
           if (!existsSync('./public/product-imgs')) {
             await mkdir('./public/product-imgs');
           }
 
+          cb(null, './public/product-imgs');
+        },
+        filename: (req, file, cb) => {
           // create image name
           const time = new Date().getTime();
           const ext = file.originalname.slice(
@@ -134,7 +136,10 @@ export class ProductsController {
   async saveProductImage(
     @UploadedFile() images: Express.Multer.File,
   ): Promise<string> {
-    if (!images) throw new BadRequestException('No image to save.');
+    if (!images)
+      throw new BadRequestException(
+        'Ninguna imagen seleccionada para guardar.',
+      );
     return `/product-imgs/${images.filename}`;
   }
 
