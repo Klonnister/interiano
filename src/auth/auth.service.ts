@@ -28,7 +28,7 @@ export class AuthService {
       password: await bcrypt.hash(password, 10),
     });
 
-    const payload = { username: user.username, role: user.role };
+    const payload = { id: user.id, role: user.role };
     const token = await this.jwtService.signAsync(payload);
 
     return {
