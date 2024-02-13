@@ -17,16 +17,26 @@ export class AuthService {
   ) {}
 
   async register({ username, password }: RegisterDto) {
-    const user = await this.usersService.findUser(username);
-    if (user)
+    const existentUser = await this.usersService.findUser(username);
+    if (existentUser)
       throw new BadRequestException(
         'Este nombre de usuario ya está en uso, pruebe con otro.',
       );
 
-    return this.usersService.createUser({
+    const user = await this.usersService.createUser({
       username,
       password: await bcrypt.hash(password, 10),
     });
+
+    const payload = { username: user.username, role: user.role };
+    const token = await this.jwtService.signAsync(payload);
+
+    return {
+      token,
+      username: user.username,
+      role: user.role,
+      image: user.image,
+    };
   }
 
   async login({ username, password }: LoginDto) {
@@ -43,11 +53,8 @@ export class AuthService {
     return {
       token,
       username: user.username,
+      image: user.image,
       role: user.role,
     };
-  }
-
-  async getProfile(username: string) {
-    return this.usersService.getProfile(username);
   }
 }
