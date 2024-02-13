@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -101,11 +102,11 @@ export class ProductsController {
         fileSize: 1000000,
       },
       storage: diskStorage({
-        destination: './public/',
+        destination: './public/product-imgs/',
         filename: async (req, file, cb) => {
           //? Validate if public directory exists
-          if (!existsSync('./public')) {
-            await mkdir('./public');
+          if (!existsSync('./public/product-imgs')) {
+            await mkdir('./public/product-imgs');
           }
 
           // create image name
@@ -133,7 +134,8 @@ export class ProductsController {
   async saveProductImage(
     @UploadedFile() images: Express.Multer.File,
   ): Promise<string> {
-    return `/${images.filename}`;
+    if (!images) throw new BadRequestException('No image to save.');
+    return `/product-imgs/${images.filename}`;
   }
 
   @Get(':id')
