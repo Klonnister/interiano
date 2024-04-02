@@ -38,8 +38,5 @@ export class LoginDto {
   @IsNotEmpty({
     message: 'El campo contraseña no puede estar vacío',
   })
-  @IsString({
-    message: 'El campo usuario debe ser texto',
-  })
   password: string;
 }
