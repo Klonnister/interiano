@@ -41,13 +41,12 @@ model Product {
   trademark    Trademark @relation(fields:[trademark_id], references:[id])
   trademark_id Int
   title        String
-  components   String?
   images       String
   size         String?
   description  String? @db.Text
-  price        Decimal @db.Decimal(6,2)
   stock        Int     @default(1)
   extra_props  Json
+  price        Decimal @db.Decimal(6,2)
   sale         Boolean @default(false)
   sale_price   Decimal @db.Decimal(6,2) @default(0)
 

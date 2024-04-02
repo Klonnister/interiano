@@ -52,7 +52,6 @@ export class ProductsController {
     )
     trademarks: number[],
     @Query('title') title: string,
-    @Query('components') components: string,
     @Query('size') size: string,
     @Query(
       'priceMin',
@@ -80,7 +79,6 @@ export class ProductsController {
       categories,
       trademarks,
       title,
-      components,
       size,
       priceMin,
       priceMax,

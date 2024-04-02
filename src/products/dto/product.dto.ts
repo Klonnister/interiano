@@ -30,14 +30,6 @@ export class productDTO {
     message: "La longitud máxima del campo 'Título' es de 40 caracteres.",
   })
   title: string;
-  @IsOptional()
-  @IsString({
-    message: "El campo 'Componentes' debe ser texto.",
-  })
-  @MaxLength(40, {
-    message: "La longitud máxima del campo 'Componentes' es de 40 caracteres.",
-  })
-  components?: string;
   @IsNotEmpty({
     message: 'Seleccione una imagen.',
   })
@@ -129,7 +121,6 @@ export class productDTO {
 //   "category_id": 1,
 //   "trademark_id": 1,
 //   "title": "Anticaída y fortalecimiento",
-//   "components": "Coco & Pepino",
 //   "images": "/1705009444448.jpg",
 //   "size": "650 ml",
 //   "description": "El mejor shampoo para cabello dañado, nutre desde raíz a puntas y ayuda al fortalecimiento completo del cabello",

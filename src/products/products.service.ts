@@ -11,7 +11,6 @@ export class ProductsService {
     categories: number[],
     trademarks: number[],
     title: string,
-    components: string,
     size: string,
     priceMin: number,
     priceMax: number,
@@ -21,9 +20,6 @@ export class ProductsService {
       where: {
         title: {
           contains: title,
-        },
-        components: {
-          contains: components,
         },
         size: {
           contains: size,
