@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Trademark } from '@prisma/client';
-import { TrademarkDTO, updateTrademarkDTO } from './dto/trademark.dto';
+import { TrademarkDTO } from './dto/trademark.dto';
 
 @Injectable()
 export class TrademarksService {
@@ -38,10 +38,7 @@ export class TrademarksService {
     });
   }
 
-  async updateTrademark(
-    id: number,
-    data: updateTrademarkDTO,
-  ): Promise<Trademark> {
+  async updateTrademark(id: number, data: TrademarkDTO): Promise<Trademark> {
     const foundTrademark = await this.getTrademarkByName(data.name);
 
     if (foundTrademark) {
