@@ -31,10 +31,7 @@ export class TrademarksService {
 
   createTrademark(data: TrademarkDTO): Promise<Trademark> {
     return this.prisma.trademark.create({
-      data: {
-        name: data.name,
-        image: data.image,
-      },
+      data,
     });
   }
 
