@@ -26,7 +26,7 @@ Then, place your secret password inside the file:
 
 ```js
 export const jwtConstants = {
-  secret: 'spott',
+  secret: 'your secret word goes here',
 };
 ```
 
