@@ -1,23 +1,21 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  PipeTransform,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { TrademarksService } from '../trademarks.service';
+import { TrademarkDTO } from '../dto/trademark.dto';
 
 @Injectable()
 export class ExistentTrademarkPipe implements PipeTransform {
   constructor(private readonly trademarksService: TrademarksService) {}
 
-  async transform(rawId: string) {
-    const id = Number(rawId);
-    if (isNaN(id))
-      throw new BadRequestException('La búsqueda de marca debe ser por ID.');
+  async transform(data: TrademarkDTO) {
+    const { name } = data;
 
-    const trademark = await this.trademarksService.getTrademarkById(id);
-    if (!trademark) throw new NotFoundException('Esta marca no existe.');
+    const existentTrademark =
+      await this.trademarksService.getTrademarkByName(name);
 
-    return id;
+    if (existentTrademark) {
+      throw new BadRequestException('Esta marca ya existe');
+    }
+
+    return data;
   }
 }

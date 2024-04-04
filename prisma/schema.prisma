@@ -20,7 +20,7 @@ model User {
 
 model Category {
   id       Int       @id @default(autoincrement())
-  name     String
+  name     String    @unique
   products Product[]
 
   @@map("categories")
@@ -28,7 +28,8 @@ model Category {
 
 model Trademark {
   id       Int       @id @default(autoincrement())
-  name     String
+  name     String    @unique
+  image    String?
   products Product[]
 
   @@map("trademarks")

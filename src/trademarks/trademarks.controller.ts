@@ -7,13 +7,21 @@ import {
   Patch,
   Post,
   Query,
+  UnsupportedMediaTypeException,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TrademarksService } from './trademarks.service';
-import { updateTrademarkDTO } from './dto/trademark.dto';
+import { TrademarkDTO } from './dto/trademark.dto';
 import { Trademark } from '@prisma/client';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { ExistentTrademarkPipe } from './pipes/existent-trademark.pipe';
-import { UnboundTrademarkPipe } from './pipes/unbound-trademark.pipe';
+import { DeletableTrademarkPipe } from './pipes/deletable-trademark.pipe';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { existsSync } from 'fs';
+import { mkdir } from 'fs/promises';
+import { ValidTrademarkPipe } from './pipes/valid-trademark.pipe';
 
 @Controller('trademarks')
 export class TrademarksController {
@@ -28,27 +36,71 @@ export class TrademarksController {
   @Get(':id')
   @Public()
   async getTrademarkById(
-    @Param('id', ExistentTrademarkPipe) id: number,
+    @Param('id', ValidTrademarkPipe) id: number,
   ): Promise<Trademark> {
     return await this.trademarksService.getTrademarkById(id);
   }
 
   @Post()
-  createTrademark(@Body() data: Trademark): Promise<Trademark> {
+  @UseInterceptors(
+    FileInterceptor('images', {
+      limits: {
+        fileSize: 1000000,
+      },
+      storage: diskStorage({
+        destination: async (req, file, cb) => {
+          // Validate if public directory exists
+          if (!existsSync('./public/trademark-imgs')) {
+            await mkdir('./public/trademark-imgs');
+          }
+
+          cb(null, './public/trademark-imgs');
+        },
+        filename: (req, file, cb) => {
+          // create image name
+          const time = new Date().getTime();
+          const ext = file.originalname.slice(
+            file.originalname.lastIndexOf('.'),
+          );
+          const imageName = time + ext;
+          const acceptedExts = ['.jpeg', '.jpg', '.png', '.webp', '.svg'];
+
+          if (!acceptedExts.includes(ext)) {
+            return cb(
+              new UnsupportedMediaTypeException(
+                'El archivo debe ser de tipo imagen.',
+              ),
+              null,
+            );
+          }
+
+          return cb(null, imageName);
+        },
+      }),
+    }),
+  )
+  createTrademark(
+    @Body(ExistentTrademarkPipe) data: TrademarkDTO,
+    @UploadedFile() images: Express.Multer.File,
+  ): Promise<Trademark> {
+    if (images) {
+      data.image = images.filename;
+    }
+
     return this.trademarksService.createTrademark(data);
   }
 
   @Patch(':id')
   async updateTrademark(
-    @Param('id', ExistentTrademarkPipe) id: number,
-    @Body() data: updateTrademarkDTO,
+    @Param('id', ValidTrademarkPipe) id: number,
+    @Body() data: TrademarkDTO,
   ): Promise<Trademark> {
     return await this.trademarksService.updateTrademark(id, data);
   }
 
   @Delete(':id')
   async deleteTrademark(
-    @Param('id', UnboundTrademarkPipe) id: number,
+    @Param('id', DeletableTrademarkPipe) id: number,
   ): Promise<Trademark> {
     return await this.trademarksService.deleteTrademark(id);
   }
