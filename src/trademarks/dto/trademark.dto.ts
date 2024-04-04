@@ -12,10 +12,4 @@ export class TrademarkDTO {
   })
   name: string;
   image?: string;
-  images?: any;
-}
-
-export class updateTrademarkDTO {
-  name: string;
-  logo?: string;
 }
