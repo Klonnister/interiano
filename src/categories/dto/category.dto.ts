@@ -7,7 +7,7 @@ export class CategoryDTO {
   @IsString({
     message: "El campo 'Nombre' debe ser texto.",
   })
-  @MaxLength(30, {
+  @MaxLength(35, {
     message: "La longitud máxima del campo 'Nombre' es de 35 caracteres.",
   })
   name: string;
