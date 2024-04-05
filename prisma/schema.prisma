@@ -11,11 +11,11 @@ datasource db {
 }
 
 model User {
-  id       Int @id @default(autoincrement())
-  username String @unique
-  password String @db.Text
+  id       Int     @id @default(autoincrement())
+  username String  @unique
+  password String  @db.Text
   image    String?
-  role     String @db.TinyText
+  role     String  @db.TinyText
 }
 
 model Category {
@@ -29,7 +29,7 @@ model Category {
 model Trademark {
   id       Int       @id @default(autoincrement())
   name     String    @unique
-  image    String?
+  image    String
   products Product[]
 
   @@map("trademarks")
@@ -42,14 +42,15 @@ model Product {
   trademark    Trademark @relation(fields:[trademark_id], references:[id])
   trademark_id Int
   title        String
-  images       String
+  image        String
   size         String?
-  description  String? @db.Text
-  stock        Int     @default(1)
+  description  String?   @db.Text
+  stock        Int       @default(1)
   extra_props  Json
-  price        Decimal @db.Decimal(6,2)
-  sale         Boolean @default(false)
-  sale_price   Decimal @db.Decimal(6,2) @default(0)
+  price        Decimal   @db.Decimal(6,2)
+  sale         Boolean   @default(false)
+  sale_price   Decimal   @db.Decimal(6,2) @default(0)
+  design       Int
 
   @@map("products")
 }
