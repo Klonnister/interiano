@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -41,7 +42,7 @@ export class TrademarksController {
     return await this.trademarksService.getTrademarkById(id);
   }
 
-  @Post()
+  @Post('images')
   @UseInterceptors(
     FileInterceptor('images', {
       limits: {
@@ -79,66 +80,36 @@ export class TrademarksController {
       }),
     }),
   )
-  createTrademark(
-    @Body(ExistentTrademarkPipe) data: TrademarkDTO,
+  saveImage(
     @UploadedFile() images: Express.Multer.File,
-  ): Promise<Trademark> {
-    if (images) {
-      data.image = `/trademark-imgs/${images.filename}`;
+    @Body('previousImage') previousImage: string,
+  ) {
+    if (!images) {
+      throw new BadRequestException('Seleccione una imagen para guardar.');
     }
 
+    if (previousImage) {
+      unlinkSync(`./public${previousImage}`);
+    }
+
+    return `/trademark-imgs/${images.filename}`;
+  }
+
+  @Post()
+  createTrademark(
+    @Body(ExistentTrademarkPipe) data: TrademarkDTO,
+  ): Promise<Trademark> {
     return this.trademarksService.createTrademark(data);
   }
 
   @Patch(':id')
-  @UseInterceptors(
-    FileInterceptor('images', {
-      limits: {
-        fileSize: 1000000,
-      },
-      storage: diskStorage({
-        destination: async (req, file, cb) => {
-          // Validate if public directory exists
-          if (!existsSync('./public/trademark-imgs')) {
-            await mkdir('./public/trademark-imgs');
-          }
-
-          cb(null, './public/trademark-imgs');
-        },
-        filename: (req, file, cb) => {
-          // create image name
-          const time = new Date().getTime();
-          const ext = file.originalname.slice(
-            file.originalname.lastIndexOf('.'),
-          );
-          const imageName = time + ext;
-          const acceptedExts = ['.jpeg', '.jpg', '.png', '.webp', '.svg'];
-
-          if (!acceptedExts.includes(ext)) {
-            return cb(
-              new UnsupportedMediaTypeException(
-                'El archivo debe ser de tipo imagen.',
-              ),
-              null,
-            );
-          }
-
-          return cb(null, imageName);
-        },
-      }),
-    }),
-  )
   async updateTrademark(
     @Param('id', ValidTrademarkPipe) id: number,
-    @UploadedFile() images: Express.Multer.File,
     @Body() data: TrademarkDTO,
   ): Promise<Trademark> {
-    if (images) {
-      if (data.image) {
-        unlinkSync(`./public${data.image}`);
-      }
-
-      data.image = `/trademark-imgs/${images.filename}`;
+    const trademark = await this.trademarksService.getTrademarkById(id);
+    if (trademark.image !== data.image) {
+      unlinkSync(`./public${trademark.image}`);
     }
 
     return await this.trademarksService.updateTrademark(id, data);

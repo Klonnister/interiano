@@ -7,9 +7,15 @@ export class TrademarkDTO {
   @IsString({
     message: "El campo 'Nombre' debe ser texto.",
   })
-  @MaxLength(30, {
+  @MaxLength(35, {
     message: "La longitud máxima del campo 'Nombre' es de 35 caracteres.",
   })
   name: string;
-  image?: string;
+  @IsNotEmpty({
+    message: "El campo 'Imagen' no puede estar vacío.",
+  })
+  @IsString({
+    message: 'Error al guardar imagen',
+  })
+  image: string;
 }
