@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class createUserDto {
   @IsNotEmpty({
@@ -12,4 +12,9 @@ export class createUserDto {
     message: 'Contraseña debe ser una cadena de texto.',
   })
   password: string;
+  @IsOptional()
+  @IsString({
+    message: 'Error al guardar imagen',
+  })
+  image?: string;
 }

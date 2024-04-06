@@ -1,5 +1,10 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+} from 'class-validator';
 
 export class RegisterDto {
   @IsNotEmpty({
@@ -24,6 +29,11 @@ export class RegisterDto {
     },
   )
   password: string;
+  @IsOptional()
+  @IsString({
+    message: 'Error al guardar imagen',
+  })
+  image?: string;
 }
 
 export class LoginDto {

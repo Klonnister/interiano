@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Post,
@@ -11,14 +12,14 @@ import { LoginDto, RegisterDto } from 'src/auth/dto/auth.dto';
 import { Public } from './decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { existsSync } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import { mkdir } from 'fs/promises';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('signup')
+  @Post('images')
   @UseInterceptors(
     FileInterceptor('images', {
       limits: {
@@ -58,11 +59,22 @@ export class AuthController {
     }),
   )
   @Public()
-  signUp(
-    @Body() userInfo: RegisterDto,
+  saveImage(
     @UploadedFile() images: Express.Multer.File,
+    @Body('previousImage') previousImage: string,
   ) {
-    if (!images) console.log('no image uploaded');
+    if (!images)
+      throw new BadRequestException('Seleccione una imagen para guardar.');
+
+    if (previousImage) {
+      unlinkSync(`./public${previousImage}`);
+    }
+
+    return `/profile/${images.filename}`;
+  }
+
+  @Post('signup')
+  signUp(@Body() userInfo: RegisterDto) {
     return this.authService.register(userInfo);
   }
 
