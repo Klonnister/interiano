@@ -1,25 +1,17 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-  PipeTransform,
-} from '@nestjs/common';
-import { CategoriesService } from '../categories.service';
+import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { CategoryDTO } from '../dto/category.dto';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Injectable()
 export class ExistentCategoryPipe implements PipeTransform {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  async transform(rawId: string) {
-    const id = Number(rawId);
-    if (isNaN(id))
-      throw new BadRequestException(
-        'La búsqueda de categoría debe ser por ID.',
-      );
+  async transform(data: CategoryDTO) {
+    const { name } = data;
 
-    const category = await this.categoriesService.getCategoryById(id);
-    if (!category) throw new NotFoundException('Esta categoría no existe.');
+    const category = await this.categoriesService.getCategoryByName(name);
+    if (category) throw new BadRequestException('Esta categoría ya existe.');
 
-    return id;
+    return data;
   }
 }

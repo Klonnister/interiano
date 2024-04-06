@@ -26,26 +26,23 @@ export class productDTO {
   @IsString({
     message: "El campo 'Título' debe ser texto.",
   })
-  @MaxLength(40, {
+  @MaxLength(80, {
     message: "La longitud máxima del campo 'Título' es de 40 caracteres.",
   })
   title: string;
   @IsNotEmpty({
-    message: 'Seleccione una imagen.',
+    message: "El campo 'Imagen' no puede estar vacío.",
   })
   @IsString({
-    message: 'Error al guardar imagen. Intente de nuevo.',
+    message: 'Error al guardar imagen',
   })
-  @MaxLength(191, {
-    message: 'Error al guardar imagen. Intente de nuevo.',
-  })
-  images: string;
+  image: string;
   @IsOptional()
   @IsString({
     message: "El campo 'Tamaño' debe ser texto.",
   })
-  @MaxLength(35, {
-    message: "La longitud máxima del campo 'Tamaño' es de 35 caracteres.",
+  @MaxLength(20, {
+    message: "La longitud máxima del campo 'Tamaño' es de 20 caracteres.",
   })
   size?: string;
   @IsOptional()
@@ -115,6 +112,10 @@ export class productDTO {
     message: "El campo 'Precio ofertado' debe ser menor a 1,000,000.",
   })
   sale_price: number;
+  @IsInt({
+    message: 'Seleccione un diseño para su producto.',
+  })
+  design: number;
 }
 
 // {
@@ -124,11 +125,12 @@ export class productDTO {
 //   "images": "/1705009444448.jpg",
 //   "size": "650 ml",
 //   "description": "El mejor shampoo para cabello dañado, nutre desde raíz a puntas y ayuda al fortalecimiento completo del cabello",
+//   "stock": 2,
 //   "price": 80.52,
 //   "sale": false,
 //   "sale_price": 0,
-//   "stock": 2,
 //   "extra_props": {
 //     "tamaño": "Mediano"
-//   }
+//   },
+//   "design": 1
 // }

@@ -86,14 +86,15 @@ export class ProductsController {
     );
   }
 
-  @Post()
-  async createProduct(
-    @Body(ValidProductPipe) data: productDTO,
+  @Get(':id')
+  @Public()
+  async getProductById(
+    @Param('id', ExistentProductPipe) id: number,
   ): Promise<Product> {
-    return this.productsService.createProduct(data);
+    return await this.productsService.getProductById(id);
   }
 
-  @Post('images')
+  @Post()
   @UseInterceptors(
     FileInterceptor('images', {
       limits: {
@@ -120,7 +121,7 @@ export class ProductsController {
           if (!acceptedExts.includes(ext)) {
             return cb(
               new UnsupportedMediaTypeException(
-                'El archivo debe ser de tipo imagen.',
+                'Este formato de imagen no es compatible, pruebe con otra.',
               ),
               null,
             );
@@ -131,22 +132,16 @@ export class ProductsController {
       }),
     }),
   )
-  async saveProductImage(
+  async createProduct(
+    @Body(ValidProductPipe) data: productDTO,
     @UploadedFile() images: Express.Multer.File,
-  ): Promise<string> {
-    if (!images)
-      throw new BadRequestException(
-        'Ninguna imagen seleccionada para guardar.',
-      );
-    return `/product-imgs/${images.filename}`;
-  }
-
-  @Get(':id')
-  @Public()
-  async getProductById(
-    @Param('id', ExistentProductPipe) id: number,
   ): Promise<Product> {
-    return await this.productsService.getProductById(id);
+    if (!images)
+      throw new BadRequestException('Por favor seleccione una imagen.');
+
+    data.image = images.filename;
+
+    return this.productsService.createProduct(data);
   }
 
   @Patch(':id')

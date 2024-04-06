@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Category } from '@prisma/client';
-import { updateCategoryDTO } from './dto/category.dto';
+import { CategoryDTO } from './dto/category.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -23,13 +23,25 @@ export class CategoriesService {
     });
   }
 
-  createCategory(data: Category): Promise<Category> {
+  getCategoryByName(name: string): Promise<Category> {
+    return this.prisma.category.findFirst({
+      where: { name },
+    });
+  }
+
+  createCategory(data: CategoryDTO): Promise<Category> {
     return this.prisma.category.create({
       data,
     });
   }
 
-  updateCategory(id: number, data: updateCategoryDTO): Promise<Category> {
+  async updateCategory(id: number, data: CategoryDTO): Promise<Category> {
+    const foundCategory = await this.getCategoryByName(data.name);
+    if (foundCategory) {
+      if (foundCategory.id !== id)
+        throw new BadRequestException('Esta categoría ya existe.');
+    }
+
     return this.prisma.category.update({
       where: { id },
       data,

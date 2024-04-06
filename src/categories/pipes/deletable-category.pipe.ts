@@ -9,7 +9,7 @@ import { CategoriesService } from '../categories.service';
 import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
-export class UnboundCategoryPipe implements PipeTransform {
+export class DeletableCategoryPipe implements PipeTransform {
   constructor(
     private readonly categoriesService: CategoriesService,
     private readonly productsService: ProductsService,
