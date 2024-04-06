@@ -20,7 +20,7 @@ import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import { diskStorage } from 'multer';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { ValidProductPipe } from './pipes/valid-product.pipe';
@@ -94,7 +94,7 @@ export class ProductsController {
     return await this.productsService.getProductById(id);
   }
 
-  @Post()
+  @Post('images')
   @UseInterceptors(
     FileInterceptor('images', {
       limits: {
@@ -121,7 +121,7 @@ export class ProductsController {
           if (!acceptedExts.includes(ext)) {
             return cb(
               new UnsupportedMediaTypeException(
-                'Este formato de imagen no es compatible, pruebe con otra.',
+                'El archivo debe ser de tipo imagen.',
               ),
               null,
             );
@@ -132,15 +132,25 @@ export class ProductsController {
       }),
     }),
   )
+  saveImage(
+    @UploadedFile() images: Express.Multer.File,
+    @Body('previousImage') previousImage: string,
+  ) {
+    if (!images) {
+      throw new BadRequestException('Seleccione una imagen para guardar.');
+    }
+
+    if (previousImage) {
+      unlinkSync(`./public${previousImage}`);
+    }
+
+    return `/product-imgs/${images.filename}`;
+  }
+
+  @Post()
   async createProduct(
     @Body(ValidProductPipe) data: productDTO,
-    @UploadedFile() images: Express.Multer.File,
   ): Promise<Product> {
-    if (!images)
-      throw new BadRequestException('Por favor seleccione una imagen.');
-
-    data.image = images.filename;
-
     return this.productsService.createProduct(data);
   }
 
@@ -149,6 +159,12 @@ export class ProductsController {
     @Param('id', ExistentProductPipe) id: number,
     @Body(ValidProductPipe) data: productDTO,
   ): Promise<Product> {
+    const product = await this.productsService.getProductById(id);
+
+    if (product.image !== data.image) {
+      unlinkSync(`./public${product.image}`);
+    }
+
     return await this.productsService.updateProduct(id, data);
   }
 
@@ -156,6 +172,8 @@ export class ProductsController {
   async deleteProduct(
     @Param('id', ExistentProductPipe) id: number,
   ): Promise<Product> {
+    const product = await this.productsService.getProductById(id);
+    unlinkSync(`./public${product.image}`);
     return await this.productsService.deleteProduct(id);
   }
 }
