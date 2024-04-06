@@ -22,7 +22,6 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { mkdir } from 'fs/promises';
 import { existsSync, unlinkSync } from 'fs';
 import { diskStorage } from 'multer';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { ValidProductPipe } from './pipes/valid-product.pipe';
 import { ExistentProductPipe } from './pipes/existent-product.pipe';
 
@@ -31,7 +30,6 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
   @Get()
-  @Public()
   getProducts(
     @Query(
       'categories',
@@ -87,7 +85,6 @@ export class ProductsController {
   }
 
   @Get(':id')
-  @Public()
   async getProductById(
     @Param('id', ExistentProductPipe) id: number,
   ): Promise<Product> {

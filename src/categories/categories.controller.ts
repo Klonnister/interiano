@@ -11,7 +11,6 @@ import {
 import { CategoriesService } from './categories.service';
 import { Category } from '@prisma/client';
 import { CategoryDTO } from './dto/category.dto';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { ValidCategoryPipe } from './pipes/valid-category.pipe';
 import { DeletableCategoryPipe } from './pipes/deletable-category.pipe';
 import { ExistentCategoryPipe } from './pipes/existent-category.pipe';
@@ -21,13 +20,11 @@ export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
   @Get()
-  @Public()
   getCategories(@Query('name') name: string): Promise<Category[]> {
     return this.categoriesService.getCategories(name);
   }
 
   @Get(':id')
-  @Public()
   async getCategoryById(
     @Param('id', ValidCategoryPipe) id: number,
   ): Promise<Category> {
