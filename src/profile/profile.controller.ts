@@ -12,7 +12,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { User } from 'src/users/decorators/user.decorator';
-import { ProfileDto } from './dto/profile.dto';
+import { ProfileDto, UpdatePasswordDto } from './dto/profile.dto';
+
 import { ProfileService } from './profile.service';
 import { unlinkSync } from 'fs';
 
@@ -71,8 +72,11 @@ export class ProfileController {
     return `/profile/${images.filename}`;
   }
 
-  @Patch()
-  updateProfile(@User('id') id: number, @Body() data: ProfileDto) {
-    return this.profileService.updateProfile(id, data);
+  @Patch('password')
+  updatePassword(
+    @User('username') username: string,
+    @Body() data: UpdatePasswordDto,
+  ) {
+    return this.profileService.updatePassword(username, data);
   }
 }

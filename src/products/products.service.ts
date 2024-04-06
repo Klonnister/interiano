@@ -36,6 +36,10 @@ export class ProductsService {
         },
         sale,
       },
+      include: {
+        category: true,
+        trademark: true,
+      },
     });
   }
 
@@ -58,6 +62,10 @@ export class ProductsService {
   getProductById(id: number): Promise<Product> {
     return this.prisma.product.findUnique({
       where: { id },
+      include: {
+        category: true,
+        trademark: true,
+      },
     });
   }
 

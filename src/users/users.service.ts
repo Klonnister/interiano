@@ -54,4 +54,13 @@ export class UsersService {
       image: user.image,
     };
   }
+
+  async updatePassword(id: number, password: string): Promise<User> {
+    return await this.prisma.user.update({
+      where: { id },
+      data: {
+        password,
+      },
+    });
+  }
 }

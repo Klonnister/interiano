@@ -12,10 +12,17 @@ export class RegisterDto {
     message: 'Ingrese un nombre de usuario.',
   })
   @IsString({
-    message: 'Ingrese un nombre de usuario valido.',
+    message: 'Ingrese un nombre de usuario válido.',
   })
   username: string;
-  @Transform(({ value }) => value.trim())
+
+  @IsString({
+    message: 'Ingrese una contraseña válida.',
+  })
+  @IsNotEmpty({
+    message: 'Ingrese la contraseña.',
+  })
+  @Transform(({ value }) => String(value).trim())
   @IsStrongPassword(
     {
       minLowercase: 0,
@@ -31,7 +38,13 @@ export class RegisterDto {
   )
   password: string;
 
-  @Transform(({ value }) => value.trim())
+  @IsString({
+    message: 'Ingrese una confirmación válida.',
+  })
+  @IsNotEmpty({
+    message: 'Ingrese la confirmación de la contraseña.',
+  })
+  @Transform(({ value }) => String(value).trim())
   @IsStrongPassword(
     {
       minLowercase: 0,
@@ -49,6 +62,7 @@ export class RegisterDto {
     message: 'Las contraseñas deben ser iguales',
   })
   passwordconfirm: string;
+
   @IsOptional()
   @IsString({
     message: 'Error al guardar imagen',
@@ -71,7 +85,7 @@ export class LoginDto {
   password: string;
 
   @IsNotEmpty({
-    message: 'a',
+    message: 'La confirmacion de contraseña no puede estar vacía',
   })
   passwordconfirm: string;
 }
