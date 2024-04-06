@@ -15,6 +15,9 @@ export class RegisterDto {
     message: 'Ingrese un nombre de usuario valido.',
   })
   username: string;
+  @IsNotEmpty({
+    message: 'Ingrese la contraseña.',
+  })
   @Transform(({ value }) => value.trim())
   @IsStrongPassword(
     {
@@ -30,7 +33,9 @@ export class RegisterDto {
     },
   )
   password: string;
-
+  @IsNotEmpty({
+    message: 'Ingrese la confirmación de la contraseña.',
+  })
   @Transform(({ value }) => value.trim())
   @IsStrongPassword(
     {
@@ -71,7 +76,7 @@ export class LoginDto {
   password: string;
 
   @IsNotEmpty({
-    message: 'a',
+    message: 'La confirmacion de contraseña no puede estar vacía',
   })
   passwordconfirm: string;
 }
