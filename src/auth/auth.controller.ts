@@ -12,8 +12,7 @@ import { LoginDto, RegisterDto } from 'src/auth/dto/auth.dto';
 import { Public } from './decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { existsSync, unlinkSync } from 'fs';
-import { mkdir } from 'fs/promises';
+import { unlinkSync } from 'fs';
 
 @Controller('auth')
 export class AuthController {
@@ -26,15 +25,7 @@ export class AuthController {
         fileSize: 1000000,
       },
       storage: diskStorage({
-        // Validate if public directory exists
-        destination: async (req, file, cb) => {
-          if (!existsSync('./public/profile/')) {
-            await mkdir('./public/profile/');
-          }
-
-          cb(null, './public/profile/');
-        },
-
+        destination: './public/profile/',
         filename: (req, file, cb) => {
           // create image name
           const time = new Date().getTime();

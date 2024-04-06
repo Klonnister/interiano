@@ -20,9 +20,8 @@ import { ExistentTrademarkPipe } from './pipes/existent-trademark.pipe';
 import { DeletableTrademarkPipe } from './pipes/deletable-trademark.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { existsSync, unlinkSync } from 'fs';
-import { mkdir } from 'fs/promises';
 import { ValidTrademarkPipe } from './pipes/valid-trademark.pipe';
+import { unlinkSync } from 'fs';
 
 @Controller('trademarks')
 export class TrademarksController {
@@ -49,14 +48,7 @@ export class TrademarksController {
         fileSize: 1000000,
       },
       storage: diskStorage({
-        destination: async (req, file, cb) => {
-          // Validate if public directory exists
-          if (!existsSync('./public/trademark-imgs')) {
-            await mkdir('./public/trademark-imgs');
-          }
-
-          cb(null, './public/trademark-imgs');
-        },
+        destination: './public/trademark-imgs',
         filename: (req, file, cb) => {
           // create image name
           const time = new Date().getTime();

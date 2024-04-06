@@ -10,12 +10,11 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { existsSync } from 'fs';
-import { mkdir } from 'fs/promises';
 import { diskStorage } from 'multer';
 import { User } from 'src/users/decorators/user.decorator';
 import { ProfileDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
+import { unlinkSync } from 'fs';
 
 @Controller('profile')
 export class ProfileController {
@@ -34,14 +33,7 @@ export class ProfileController {
       },
       storage: diskStorage({
         // Validate if public directory exists
-        destination: async (req, file, cb) => {
-          if (!existsSync('./public/profile/')) {
-            await mkdir('./public/profile/');
-          }
-
-          cb(null, './public/profile/');
-        },
-
+        destination: './public/profile/',
         filename: (req, file, cb) => {
           // create image name
           const time = new Date().getTime();
@@ -67,11 +59,15 @@ export class ProfileController {
   )
   async uploadProfileImage(
     @UploadedFile() images: Express.Multer.File,
+    @Body('previousImage') previousImage: string,
   ): Promise<string> {
     if (!images)
-      throw new BadRequestException(
-        'Ninguna imagen seleccionada para guardar.',
-      );
+      throw new BadRequestException('Seleccione una imagen para guardar.');
+
+    if (previousImage) {
+      unlinkSync(`./public${previousImage}`);
+    }
+
     return `/profile/${images.filename}`;
   }
 
