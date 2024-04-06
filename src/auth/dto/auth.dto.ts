@@ -83,9 +83,4 @@ export class LoginDto {
     message: 'El campo contraseña no puede estar vacío',
   })
   password: string;
-
-  @IsNotEmpty({
-    message: 'La confirmacion de contraseña no puede estar vacía',
-  })
-  passwordconfirm: string;
 }
