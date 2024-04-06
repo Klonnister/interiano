@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 async function main() {
   await prisma.user.create({
     data: {
       username: 'admin',
-      password: 'admin1*',
+      password: await bcrypt.hash('admin1*', 10),
       role: 'admin',
     },
   });
