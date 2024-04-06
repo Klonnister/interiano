@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class TrademarkDTO {
   @IsNotEmpty({
@@ -11,11 +11,9 @@ export class TrademarkDTO {
     message: "La longitud máxima del campo 'Nombre' es de 35 caracteres.",
   })
   name: string;
-  @IsNotEmpty({
-    message: "El campo 'Imagen' no puede estar vacío.",
-  })
+  @IsOptional()
   @IsString({
     message: 'Error al guardar imagen',
   })
-  image: string;
+  image?: string;
 }
