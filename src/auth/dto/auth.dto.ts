@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
+import { Match } from '../decorators/match.decorator';
 
 export class RegisterDto {
   @IsNotEmpty({
@@ -24,6 +25,25 @@ export class RegisterDto {
     },
   )
   password: string;
+
+  @Transform(({ value }) => value.trim())
+  @IsStrongPassword(
+    {
+      minLowercase: 0,
+      minUppercase: 0,
+      minLength: 6,
+      minNumbers: 1,
+      minSymbols: 1,
+    },
+    {
+      message:
+        'La contraseña debe contener un número, un simbolo y 6 caracteres como minimo.',
+    },
+  )
+  @Match('password', {
+    message: 'Las contraseñas deben ser iguales',
+  })
+  passwordconfirm: string;
 }
 
 export class LoginDto {
@@ -39,4 +59,9 @@ export class LoginDto {
     message: 'El campo contraseña no puede estar vacío',
   })
   password: string;
+
+  @IsNotEmpty({
+    message: 'a',
+  })
+  passwordconfirm: string;
 }
