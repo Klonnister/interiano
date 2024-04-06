@@ -8,11 +8,16 @@ import { ProfileDto } from 'src/profile/dto/profile.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser({ username, password }: createUserDto) {
+  getUsers() {
+    return this.prisma.user.count();
+  }
+
+  async createUser({ username, password, image }: createUserDto) {
     return this.prisma.user.create({
       data: {
         username,
         password,
+        image,
         role: 'admin',
       },
     });

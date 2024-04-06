@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -16,7 +17,13 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register({ username, password }: RegisterDto) {
+  async register({ username, image, password }: RegisterDto) {
+    const users = await this.usersService.getUsers();
+    if (users)
+      throw new ForbiddenException(
+        'Actualmente solo se puede registrar un usuario.',
+      );
+
     const existentUser = await this.usersService.findUser(username);
     if (existentUser)
       throw new BadRequestException(
@@ -25,6 +32,7 @@ export class AuthService {
 
     const user = await this.usersService.createUser({
       username,
+      image,
       password: await bcrypt.hash(password, 10),
     });
 
