@@ -39,6 +39,14 @@ export class ProfileController {
     return `/profile-imgs/${images.filename}`;
   }
 
+  @Patch()
+  updateProfile(
+    @User('username') username: string,
+    @Body() data: ProfileDto,
+  ): Promise<ProfileDto> {
+    return this.profileService.updateProfile(username, data);
+  }
+
   @Patch('password')
   updatePassword(
     @User('username') username: string,
