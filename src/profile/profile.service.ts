@@ -54,7 +54,6 @@ export class ProfileService {
     return {
       token,
       username: user.username,
-      role: user.role,
       image: user.image,
     };
   }

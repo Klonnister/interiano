@@ -42,7 +42,6 @@ export class AuthService {
     return {
       token,
       username: user.username,
-      role: user.role,
       image: user.image,
     };
   }
@@ -61,7 +60,6 @@ export class AuthService {
     return {
       token,
       username: user.username,
-      role: user.role,
       image: user.image,
     };
   }
