@@ -6,6 +6,7 @@ async function main() {
     data: {
       username: 'admin',
       password: await bcrypt.hash('admin1*', 10),
+      image: '/profile-imgs/Pocoyó-.jpg',
       role: 'admin',
     },
   });
@@ -18,11 +19,11 @@ async function main() {
     data: [
       {
         name: 'Garnier Fructis',
-        image: '1.png',
+        image: '/trademark-imgs/1.png',
       },
       {
         name: 'Pantene',
-        image: '2.png',
+        image: '/trademark-imgs/2.png',
       },
       {
         name: 'Head & Shoulders',
@@ -37,7 +38,7 @@ async function main() {
         category_id: 1,
         trademark_id: 2,
         title: 'Shampoo Control Caída, Bambú Nutre y Crece',
-        image: 'product1.webp',
+        image: '/product-imgs/product1.webp',
         size: '400ml',
         description:
           'El mejor shampoo para la caída de cabello, nutre desde raíz a puntas y ayuda al fortalecimiento completo del cabello',
@@ -54,7 +55,7 @@ async function main() {
         category_id: 1,
         trademark_id: 1,
         title: 'Shampoo Nutrición Hair Food Aguacate Fórmula vegana',
-        image: 'product2.webp',
+        image: '/product-imgs/product2.webp',
         size: '300ml',
         description:
           'Nuevo Shampoo Fórmula vegana sin colorantes artificiales, siliconas ni parabenos. Nutre desde la raíz hasta la punta. Ingredientes de origen 98% natural',
@@ -69,7 +70,7 @@ async function main() {
         category_id: 2,
         trademark_id: 3,
         title: 'Acondicionador Dermo suave y manejable. Control Caspa',
-        image: 'product3.png',
+        image: '/product-imgs/product3.png',
         size: '300ml',
         description:
           'Acondicionador dermo que suaviza el cabello desde la raíz hasta las puntas.',
