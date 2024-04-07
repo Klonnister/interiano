@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   async register({ username, image, password }: RegisterDto) {
-    const users = await this.usersService.getUsers();
+    const users = await this.usersService.countUsers();
     if (users)
       throw new ForbiddenException(
         'Actualmente solo se puede registrar un usuario.',

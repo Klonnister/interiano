@@ -8,7 +8,7 @@ import { ProfileDto } from 'src/profile/dto/profile.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  getUsers() {
+  countUsers() {
     return this.prisma.user.count();
   }
 
