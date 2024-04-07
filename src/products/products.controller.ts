@@ -17,7 +17,7 @@ import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { unlinkSync } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import { ValidProductPipe } from './pipes/valid-product.pipe';
 import { ExistentProductPipe } from './pipes/existent-product.pipe';
 import getImageOptions from '../images/imageOptionsHelper';
@@ -97,7 +97,7 @@ export class ProductsController {
     @UploadedFile(ValidImagePipe) images: Express.Multer.File,
     @Body('previousImage') previousImage: string,
   ) {
-    if (previousImage) {
+    if (previousImage && existsSync(`./public${previousImage}`)) {
       unlinkSync(`./public${previousImage}`);
     }
 
