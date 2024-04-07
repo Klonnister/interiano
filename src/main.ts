@@ -7,7 +7,7 @@ import { mkdir } from 'fs/promises';
 async function bootstrap() {
   if (!existsSync('./public')) {
     await mkdir('./public');
-    await mkdir('./public/profile/');
+    await mkdir('./public/profile-imgs/');
     await mkdir('./public/trademark-imgs');
     await mkdir('./public/product-imgs');
   }
