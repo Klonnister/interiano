@@ -13,7 +13,7 @@ import { ProfileModule } from './profile/profile.module';
     CategoriesModule,
     TrademarksModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '../..', 'public'),
     }),
     AuthModule,
     ProfileModule,

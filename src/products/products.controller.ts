@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -11,7 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  UnsupportedMediaTypeException,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -19,11 +17,11 @@ import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { mkdir } from 'fs/promises';
-import { existsSync, unlinkSync } from 'fs';
-import { diskStorage } from 'multer';
+import { unlinkSync } from 'fs';
 import { ValidProductPipe } from './pipes/valid-product.pipe';
 import { ExistentProductPipe } from './pipes/existent-product.pipe';
+import getImageOptions from '../images/imageOptionsHelper';
+import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 
 @Controller('products')
 export class ProductsController {
@@ -93,50 +91,12 @@ export class ProductsController {
 
   @Post('images')
   @UseInterceptors(
-    FileInterceptor('images', {
-      limits: {
-        fileSize: 1000000,
-      },
-      storage: diskStorage({
-        destination: async (req, file, cb) => {
-          // Validate if public directory exists
-          if (!existsSync('./public/product-imgs')) {
-            await mkdir('./public/product-imgs');
-          }
-
-          cb(null, './public/product-imgs');
-        },
-        filename: (req, file, cb) => {
-          // create image name
-          const time = new Date().getTime();
-          const ext = file.originalname.slice(
-            file.originalname.lastIndexOf('.'),
-          );
-          const imageName = time + ext;
-          const acceptedExts = ['.jpeg', '.jpg', '.png', '.webp', '.svg'];
-
-          if (!acceptedExts.includes(ext)) {
-            return cb(
-              new UnsupportedMediaTypeException(
-                'El archivo debe ser de tipo imagen.',
-              ),
-              null,
-            );
-          }
-
-          return cb(null, imageName);
-        },
-      }),
-    }),
+    FileInterceptor('images', getImageOptions('./public/product-imgs')),
   )
   saveImage(
-    @UploadedFile() images: Express.Multer.File,
+    @UploadedFile(ValidImagePipe) images: Express.Multer.File,
     @Body('previousImage') previousImage: string,
   ) {
-    if (!images) {
-      throw new BadRequestException('Seleccione una imagen para guardar.');
-    }
-
     if (previousImage) {
       unlinkSync(`./public${previousImage}`);
     }
