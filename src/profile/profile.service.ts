@@ -20,15 +20,15 @@ export class ProfileService {
     return this.usersService.getUserProfile(id);
   }
 
-  async updateProfile(username: string, data: ProfileDto): Promise<ProfileDto> {
-    const foundUser = await this.usersService.findUser(username);
+  async updateProfile(id: number, data: ProfileDto): Promise<ProfileDto> {
+    const foundUser = await this.usersService.getUserProfile(id);
     if (!foundUser) throw new NotFoundException('Este usuario no existe.');
 
-    return await this.usersService.updateUserProfile(username, data);
+    return await this.usersService.updateUserProfile(id, data);
   }
 
-  async updatePassword(userName: string, data: UpdatePasswordDto) {
-    const foundUser = await this.usersService.findUser(userName);
+  async updatePassword(id: number, data: UpdatePasswordDto) {
+    const foundUser = await this.usersService.getUser(id);
     if (!foundUser) throw new NotFoundException('Este usuario no existe.');
 
     const isValidPassword = await bcrypt.compare(
@@ -46,7 +46,7 @@ export class ProfileService {
       throw new BadRequestException('Seleccione otra contraseña.');
 
     const password = await bcrypt.hash(data.newpassword, 10);
-    const user = await this.usersService.updatePassword(foundUser.id, password);
+    const user = await this.usersService.updatePassword(id, password);
 
     const payload = { id: user.id, role: user.role };
     const token = await this.jwtService.signAsync(payload);

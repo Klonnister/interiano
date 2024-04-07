@@ -59,7 +59,7 @@ export class UpdatePasswordDto {
   })
   @Transform(({ value }) => String(value).trim())
   @Match('newpassword', {
-    message: 'Las contraseñas nuevas deben ser iguales',
+    message: 'Las contraseña nueva no coincide con la confirmación',
   })
   newpasswordconfirm: string;
 }

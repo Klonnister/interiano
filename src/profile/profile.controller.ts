@@ -41,17 +41,14 @@ export class ProfileController {
 
   @Patch()
   updateProfile(
-    @User('username') username: string,
+    @User('id') id: number,
     @Body() data: ProfileDto,
   ): Promise<ProfileDto> {
-    return this.profileService.updateProfile(username, data);
+    return this.profileService.updateProfile(id, data);
   }
 
   @Patch('password')
-  updatePassword(
-    @User('username') username: string,
-    @Body() data: UpdatePasswordDto,
-  ) {
-    return this.profileService.updatePassword(username, data);
+  updatePassword(@User('id') id: number, @Body() data: UpdatePasswordDto) {
+    return this.profileService.updatePassword(id, data);
   }
 }
