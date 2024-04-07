@@ -7,9 +7,9 @@ import { Public } from './decorators/public.decorator';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
+  @Post('register')
   @Public()
-  signUp(@Body() userInfo: RegisterDto) {
+  register(@Body() userInfo: RegisterDto) {
     return this.authService.register(userInfo);
   }
 

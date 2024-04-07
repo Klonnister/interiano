@@ -82,5 +82,8 @@ export class LoginDto {
   @IsNotEmpty({
     message: 'El campo contraseña no puede estar vacío',
   })
+  @IsString({
+    message: 'Ingrese una contraseña válida',
+  })
   password: string;
 }

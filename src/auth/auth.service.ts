@@ -24,7 +24,7 @@ export class AuthService {
         'Actualmente solo se puede registrar un usuario.',
       );
 
-    const existentUser = await this.usersService.findUser(username);
+    const existentUser = await this.usersService.getUserByName(username);
     if (existentUser)
       throw new BadRequestException(
         'Este nombre de usuario ya está en uso, pruebe con otro.',
@@ -48,21 +48,21 @@ export class AuthService {
   }
 
   async login({ username, password }: LoginDto) {
-    const user = await this.usersService.findUser(username);
+    const user = await this.usersService.getUserByName(username);
     if (!user) throw new NotFoundException('Este usuario no existe.');
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword)
       throw new UnauthorizedException('La contraseña es incorrecta');
 
-    const payload = { username: user.username, role: user.role };
+    const payload = { id: user.id, role: user.role };
     const token = await this.jwtService.signAsync(payload);
 
     return {
       token,
       username: user.username,
-      image: user.image,
       role: user.role,
+      image: user.image,
     };
   }
 }

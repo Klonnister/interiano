@@ -8,22 +8,13 @@ import { ProfileDto } from 'src/profile/dto/profile.dto';
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  countUsers() {
-    return this.prisma.user.count();
-  }
-
-  async createUser({ username, password, image }: createUserDto) {
-    return this.prisma.user.create({
-      data: {
-        username,
-        password,
-        image,
-        role: 'admin',
-      },
+  getUser(id: number): Promise<User> {
+    return this.prisma.user.findUnique({
+      where: { id },
     });
   }
 
-  findUser(username: string): Promise<User> {
+  getUserByName(username: string): Promise<User> {
     return this.prisma.user.findUnique({
       where: { username },
     });
@@ -40,12 +31,24 @@ export class UsersService {
     };
   }
 
-  async updateUserProfile(
-    username: string,
-    data: ProfileDto,
-  ): Promise<ProfileDto> {
+  countUsers() {
+    return this.prisma.user.count();
+  }
+
+  async createUser({ username, password, image }: createUserDto) {
+    return this.prisma.user.create({
+      data: {
+        username,
+        password,
+        image,
+        role: 'admin',
+      },
+    });
+  }
+
+  async updateUserProfile(id: number, data: ProfileDto): Promise<ProfileDto> {
     const user = await this.prisma.user.update({
-      where: { username },
+      where: { id },
       data: {
         username: data.username,
         image: data.image,
