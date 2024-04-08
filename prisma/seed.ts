@@ -6,7 +6,7 @@ async function main() {
     data: {
       username: 'admin',
       password: await bcrypt.hash('admin1*', 10),
-      image: '/profile-imgs/Pocoyó-.jpg',
+      image: '/profile-imgs/pocoyo.jpg',
       role: 'admin',
     },
   });
