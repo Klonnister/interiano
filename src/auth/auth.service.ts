@@ -35,7 +35,7 @@ export class AuthService {
       password: await bcrypt.hash(password, 10),
     });
 
-    const payload = { id: user.id, role: user.role };
+    const payload = { sub: user.id, role: user.role };
     const token = await this.jwtService.signAsync(payload);
 
     return {
@@ -53,7 +53,7 @@ export class AuthService {
     if (!isValidPassword)
       throw new UnauthorizedException('La contraseña es incorrecta');
 
-    const payload = { id: user.id, role: user.role };
+    const payload = { sub: user.id, role: user.role };
     const token = await this.jwtService.signAsync(payload);
 
     return {

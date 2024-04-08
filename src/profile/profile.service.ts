@@ -48,7 +48,7 @@ export class ProfileService {
     const password = await bcrypt.hash(data.newpassword, 10);
     const user = await this.usersService.updatePassword(id, password);
 
-    const payload = { id: user.id, role: user.role };
+    const payload = { sub: user.id, role: user.role };
     const token = await this.jwtService.signAsync(payload);
 
     return {

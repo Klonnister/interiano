@@ -20,7 +20,7 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Get()
-  profile(@User('id') id: number): Promise<ProfileDto> {
+  profile(@User('sub') id: number): Promise<ProfileDto> {
     return this.profileService.getProfile(id);
   }
 
@@ -41,14 +41,14 @@ export class ProfileController {
 
   @Patch()
   updateProfile(
-    @User('id') id: number,
+    @User('sub') id: number,
     @Body() data: ProfileDto,
   ): Promise<ProfileDto> {
     return this.profileService.updateProfile(id, data);
   }
 
   @Patch('password')
-  updatePassword(@User('id') id: number, @Body() data: UpdatePasswordDto) {
+  updatePassword(@User('sub') id: number, @Body() data: UpdatePasswordDto) {
     return this.profileService.updatePassword(id, data);
   }
 }
