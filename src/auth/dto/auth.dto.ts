@@ -1,9 +1,9 @@
 import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
-  IsOptional,
   IsString,
   IsStrongPassword,
+  MaxLength,
 } from 'class-validator';
 import { Match } from '../decorators/match.decorator';
 
@@ -13,6 +13,9 @@ export class RegisterDto {
   })
   @IsString({
     message: 'Ingrese un nombre de usuario válido.',
+  })
+  @MaxLength(12, {
+    message: 'La longitud máxima del nombre de usuario es de 12 caracteres',
   })
   username: string;
 
@@ -45,29 +48,10 @@ export class RegisterDto {
     message: 'Ingrese la confirmación de la contraseña.',
   })
   @Transform(({ value }) => String(value).trim())
-  @IsStrongPassword(
-    {
-      minLowercase: 0,
-      minUppercase: 0,
-      minLength: 6,
-      minNumbers: 1,
-      minSymbols: 1,
-    },
-    {
-      message:
-        'La contraseña debe contener un número, un simbolo y 6 caracteres como minimo.',
-    },
-  )
   @Match('password', {
-    message: 'Las contraseñas deben ser iguales',
+    message: 'Las contraseñas contraseñas no coinciden',
   })
   passwordconfirm: string;
-
-  @IsOptional()
-  @IsString({
-    message: 'Error al guardar imagen',
-  })
-  image?: string;
 }
 
 export class LoginDto {
