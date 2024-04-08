@@ -35,12 +35,11 @@ export class UsersService {
     return this.prisma.user.count();
   }
 
-  async createUser({ username, password, image }: createUserDto) {
+  async createUser({ username, password }: createUserDto) {
     return this.prisma.user.create({
       data: {
         username,
         password,
-        image,
         role: 'admin',
       },
     });

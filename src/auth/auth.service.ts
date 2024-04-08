@@ -17,7 +17,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register({ username, image, password }: RegisterDto) {
+  async register({ username, password }: RegisterDto) {
     const users = await this.usersService.countUsers();
     if (users)
       throw new ForbiddenException(
@@ -32,7 +32,6 @@ export class AuthService {
 
     const user = await this.usersService.createUser({
       username,
-      image,
       password: await bcrypt.hash(password, 10),
     });
 
