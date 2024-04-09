@@ -1,7 +1,10 @@
-# Interiano (product API).
+<div align="center">
+  <img src="./public/interiano-logo-shadowed.svg"/>
+</div>
 
-## Description
-This is a server in charge of managing product inventory for a small company or an entrepeneur. It currently only accepts one user (admin).
+<h1 align="center">Interiano (Product API)</h1>
+
+A server in charge of storing product data for a small company or an entrepeneur. See all endpoints for different CRUD operations in the [Interiano endpoints]() file. The server currently accepts just one user.
 
 
 ## Installation
