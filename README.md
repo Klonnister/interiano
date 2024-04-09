@@ -48,5 +48,12 @@ $ npm run start:prod
 
 ## Author
 
+Dennis Herrera
+
 - Github - [Klonnister](https://github.com/klonnister)
 - Instagram - [dennis_herrera_f](https://www.instagram.com/dennis_herrera_f/)
+
+## Collaborators
+
+- [Darin Funes](https://github.com/DarinFunes)
+- [Cristian López](https://github.com/CristianBlake)
