@@ -10,6 +10,7 @@ async function bootstrap() {
     await mkdir('./public/profile-imgs/');
     await mkdir('./public/trademark-imgs');
     await mkdir('./public/product-imgs');
+    await mkdir('./public/guest-imgs');
   }
 
   const app = await NestFactory.create(AppModule);
