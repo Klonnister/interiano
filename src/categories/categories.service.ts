@@ -9,7 +9,7 @@ export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
   async getCategories(name: string, page: number) {
-    const [users, meta] = await prisma.category
+    const [categories, meta] = await prisma.category
       .paginate({
         where: {
           name: {
@@ -23,7 +23,7 @@ export class CategoriesService {
         page: page ? page : 1,
       });
 
-    return { users, meta };
+    return { categories, meta };
   }
 
   getCategoryById(id: number): Promise<Category> {
