@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -20,8 +21,11 @@ export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
   @Get()
-  getCategories(@Query('name') name: string): Promise<Category[]> {
-    return this.categoriesService.getCategories(name);
+  getCategories(
+    @Query('name') name: string,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
+  ) {
+    return this.categoriesService.getCategories(name, page);
   }
 
   @Get(':id')
