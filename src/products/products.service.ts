@@ -1,4 +1,4 @@
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService, prisma } from '../prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { Injectable } from '@nestjs/common';
@@ -15,32 +15,41 @@ export class ProductsService {
     priceMin: number,
     priceMax: number,
     sale: boolean,
-  ): Promise<Product[]> {
-    return this.prisma.product.findMany({
-      where: {
-        title: {
-          contains: title,
+    page: number,
+  ) {
+    const [products, meta] = await prisma.product
+      .paginate({
+        where: {
+          title: {
+            contains: title,
+          },
+          size: {
+            contains: size,
+          },
+          category_id: {
+            in: categories,
+          },
+          trademark_id: {
+            in: trademarks,
+          },
+          price: {
+            gte: priceMin,
+            lte: priceMax,
+          },
+          sale,
         },
-        size: {
-          contains: size,
+        include: {
+          category: true,
+          trademark: true,
         },
-        category_id: {
-          in: categories,
-        },
-        trademark_id: {
-          in: trademarks,
-        },
-        price: {
-          gte: priceMin,
-          lte: priceMax,
-        },
-        sale,
-      },
-      include: {
-        category: true,
-        trademark: true,
-      },
-    });
+      })
+      .withPages({
+        limit: 12,
+        includePageCount: true,
+        page: page ? page : 1,
+      });
+
+    return { products, meta };
   }
 
   getProductsByTrademark(trademark_id: number): Promise<Product[]> {

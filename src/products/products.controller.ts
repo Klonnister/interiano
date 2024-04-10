@@ -7,6 +7,7 @@ import {
   ParseArrayPipe,
   ParseBoolPipe,
   ParseFloatPipe,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -70,7 +71,8 @@ export class ProductsController {
       }),
     )
     sale: boolean,
-  ): Promise<Product[]> {
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
+  ) {
     return this.productsService.getProducts(
       categories,
       trademarks,
@@ -79,6 +81,7 @@ export class ProductsController {
       priceMin,
       priceMax,
       sale,
+      page,
     );
   }
 
