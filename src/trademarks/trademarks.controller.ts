@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -13,7 +14,6 @@ import {
 import { TrademarksService } from './trademarks.service';
 import { TrademarkDTO } from './dto/trademark.dto';
 import { Trademark } from '@prisma/client';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { ExistentTrademarkPipe } from './pipes/existent-trademark.pipe';
 import { DeletableTrademarkPipe } from './pipes/deletable-trademark.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -27,13 +27,14 @@ export class TrademarksController {
   constructor(private trademarksService: TrademarksService) {}
 
   @Get()
-  @Public()
-  getTrademarks(@Query('name') name: string): Promise<Trademark[]> {
-    return this.trademarksService.getTrademarks(name);
+  getTrademarks(
+    @Query('name') name: string,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
+  ) {
+    return this.trademarksService.getTrademarks(name, page);
   }
 
   @Get(':id')
-  @Public()
   async getTrademarkById(
     @Param('id', ValidTrademarkPipe) id: number,
   ): Promise<Trademark> {
