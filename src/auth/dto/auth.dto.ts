@@ -49,7 +49,7 @@ export class RegisterDto {
   })
   @Transform(({ value }) => String(value).trim())
   @Match('password', {
-    message: 'Las contraseñas contraseñas no coinciden',
+    message: 'Las contraseñas no coinciden',
   })
   passwordconfirm: string;
 }
@@ -59,7 +59,7 @@ export class LoginDto {
     message: 'El campo usuario no puede estar vacío',
   })
   @IsString({
-    message: 'El campo usuario debe ser texto',
+    message: 'Este usuario no existe.',
   })
   username: string;
 
@@ -67,7 +67,7 @@ export class LoginDto {
     message: 'El campo contraseña no puede estar vacío',
   })
   @IsString({
-    message: 'Ingrese una contraseña válida',
+    message: 'La contraseña es incorrecta.',
   })
   password: string;
 }
