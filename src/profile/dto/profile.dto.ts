@@ -3,6 +3,7 @@ import {
   IsOptional,
   IsString,
   IsStrongPassword,
+  MaxLength,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { Match } from 'src/auth/decorators/match.decorator';
@@ -13,6 +14,9 @@ export class ProfileDto {
   })
   @IsString({
     message: 'Ingrese un nombre de usuario válido',
+  })
+  @MaxLength(12, {
+    message: 'La longitud máxima del nombre de usuario es de 12 caracteres',
   })
   username: string;
 
