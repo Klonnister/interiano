@@ -14,6 +14,7 @@ import { ProfileService } from './profile.service';
 import { existsSync, unlinkSync } from 'fs';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 import getImageOptions from '../images/helpers/imageOptionsHelper';
+import { ValidProfilePipe } from './pipes/valid-profile.pipe';
 
 @Controller('profile')
 export class ProfileController {
@@ -42,7 +43,7 @@ export class ProfileController {
   @Patch()
   updateProfile(
     @User('sub') id: number,
-    @Body() data: ProfileDto,
+    @Body(ValidProfilePipe) data: ProfileDto,
   ): Promise<ProfileDto> {
     return this.profileService.updateProfile(id, data);
   }

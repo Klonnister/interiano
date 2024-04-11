@@ -8,6 +8,7 @@ import { ProfileDto, UpdatePasswordDto } from './dto/profile.dto';
 import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class ProfileService {
@@ -24,7 +25,26 @@ export class ProfileService {
     const foundUser = await this.usersService.getUserProfile(id);
     if (!foundUser) throw new NotFoundException('Este usuario no existe.');
 
-    return await this.usersService.updateUserProfile(id, data);
+    const previousImage = foundUser.image;
+
+    try {
+      const updatedProfile = await this.usersService.updateUserProfile(
+        id,
+        data,
+      );
+
+      if (
+        previousImage !== data.image &&
+        existsSync(`./public${previousImage}`)
+      ) {
+        unlinkSync(`./public${previousImage}`);
+      }
+      return updatedProfile;
+    } catch (error) {
+      throw new BadRequestException(
+        'Se recibió información no esperada. Por favor revise.',
+      );
+    }
   }
 
   async updatePassword(id: number, data: UpdatePasswordDto) {
