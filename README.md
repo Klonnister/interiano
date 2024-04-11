@@ -10,8 +10,8 @@ Interiano api currently accepts just one user.
 
 ## Frameworks and ORM
 
-- <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/NestJS.svg" width="15" height="15"> &nbsp;Nestjs
-- <img src="https://www.svgrepo.com/show/373776/light-prisma.svg" width="10" height="15"> &nbsp;Prisma.io
+- <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/NestJS.svg" width="20" height="20"> &nbsp;Nestjs
+- <img src="https://www.svgrepo.com/show/373776/light-prisma.svg" width="35" height="35"> &nbsp;Prisma.io
 
 
 ## Installation
