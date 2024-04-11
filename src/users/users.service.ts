@@ -6,7 +6,7 @@ import { ProfileDto } from 'src/profile/dto/profile.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   getUser(id: number): Promise<User> {
     return this.prisma.user.findUnique({
