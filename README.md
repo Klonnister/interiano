@@ -4,7 +4,14 @@
 
 <h1 align="center">Interiano (Product API)</h1>
 
-A server in charge of storing product data for a small company or an entrepeneur. See all endpoints for different CRUD operations in the [Interiano endpoints]() file. The server currently accepts just one user.
+A server in charge of storing product data for a small company or an entrepeneur. All information is stored in a database and files are served in the public directory.
+
+Interiano api currently accepts just one user.
+
+## Frameworks and ORM
+
+- <img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/NestJS.svg" width="10" height="10">Nestjs
+- <img src="https://www.svgrepo.com/show/373776/light-prisma.svg" width="10" height="10">Prisma.io
 
 
 ## Installation
