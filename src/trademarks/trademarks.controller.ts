@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -68,10 +69,10 @@ export class TrademarksController {
     @Param('id', ValidTrademarkPipe) id: number,
     @Body() data: TrademarkDTO,
   ): Promise<Trademark> {
-    const trademark = await this.trademarksService.getTrademarkById(id);
-    if (trademark.image !== data.image) {
-      unlinkSync(`./public${trademark.image}`);
-    }
+    if (data.image && !existsSync(`./public${data.image}`))
+      throw new BadRequestException(
+        'Error al guardar imagen, seleccione otra.',
+      );
 
     return await this.trademarksService.updateTrademark(id, data);
   }
@@ -81,7 +82,7 @@ export class TrademarksController {
     @Param('id', DeletableTrademarkPipe) id: number,
   ): Promise<Trademark> {
     const trademark = await this.getTrademarkById(id);
-    if (trademark.image) {
+    if (trademark.image && existsSync(`./public${trademark.image}`)) {
       unlinkSync(`./public${trademark.image}`);
     }
 

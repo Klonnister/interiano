@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Trademark } from '@prisma/client';
 import { TrademarkDTO } from './dto/trademark.dto';
 import { paginate } from 'src/prisma/helpers/paginator';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class TrademarksService {
@@ -36,24 +37,48 @@ export class TrademarksService {
     });
   }
 
-  createTrademark(data: TrademarkDTO): Promise<Trademark> {
-    return this.prisma.trademark.create({
-      data,
-    });
+  async createTrademark(data: TrademarkDTO): Promise<Trademark> {
+    try {
+      return await this.prisma.trademark.create({
+        data,
+      });
+    } catch (error) {
+      throw new BadRequestException(
+        'Se recibió información no esperada, por favo revise.',
+      );
+    }
   }
 
   async updateTrademark(id: number, data: TrademarkDTO): Promise<Trademark> {
     const foundTrademark = await this.getTrademarkByName(data.name);
-
     if (foundTrademark) {
       if (foundTrademark.id !== id)
         throw new BadRequestException('Esta marca ya existe.');
     }
 
-    return this.prisma.trademark.update({
-      where: { id },
-      data,
-    });
+    const trademark = await this.getTrademarkById(id);
+    const previousImage = trademark.image;
+
+    try {
+      const updatedTrademark = await this.prisma.trademark.update({
+        where: { id },
+        data,
+      });
+
+      if (
+        previousImage &&
+        previousImage !== data.image &&
+        existsSync(`./public${previousImage}`)
+      ) {
+        unlinkSync(`./public${previousImage}`);
+      }
+
+      return updatedTrademark;
+    } catch (error) {
+      throw new BadRequestException(
+        'Se recibió información no esperada. Por favor revise.',
+      );
+    }
   }
 
   deleteTrademark(id: number): Promise<Trademark> {
