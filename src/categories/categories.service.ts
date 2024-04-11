@@ -6,7 +6,7 @@ import { paginate } from 'src/prisma/paginator';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async getCategories(name: string, page: number) {
     return paginate(
