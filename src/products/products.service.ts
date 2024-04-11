@@ -7,7 +7,7 @@ import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class ProductsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async getProducts(
     categories: number[],

@@ -26,7 +26,7 @@ import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) {}
 
   @Get()
   getProducts(
