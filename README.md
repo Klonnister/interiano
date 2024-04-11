@@ -1,6 +1,8 @@
-<a href="https://github.com/Klonnister/interiano" align="center">
-  <img src="./public/interiano-logo-shadowed.svg"/>
-</a>
+<div align="center">
+  <a href="https://github.com/Klonnister/interiano">
+    <img src="./public/interiano-logo-shadowed.svg"/>
+  </a>
+</div>
 
 <h1 align="center">Interiano (Product API)</h1>
 
