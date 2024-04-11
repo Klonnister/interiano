@@ -36,10 +36,16 @@ export class CategoriesService {
     });
   }
 
-  createCategory(data: CategoryDTO): Promise<Category> {
-    return this.prisma.category.create({
-      data,
-    });
+  async createCategory(data: CategoryDTO): Promise<Category> {
+    try {
+      return await this.prisma.category.create({
+        data,
+      });
+    } catch (error) {
+      throw new BadRequestException(
+        'Se recibió información no esperada. Por favor revise.',
+      );
+    }
   }
 
   async updateCategory(id: number, data: CategoryDTO): Promise<Category> {
@@ -49,10 +55,16 @@ export class CategoriesService {
         throw new BadRequestException('Esta categoría ya existe.');
     }
 
-    return this.prisma.category.update({
-      where: { id },
-      data,
-    });
+    try {
+      return await this.prisma.category.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      throw new BadRequestException(
+        'Se recibió información no esperada. Por favor revise.',
+      );
+    }
   }
 
   deleteCategory(id: number): Promise<Category> {
