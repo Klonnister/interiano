@@ -13,12 +13,12 @@ Interiano api currently accepts just one user.
 <ul>
   <li>
     <a href="https://nestjs.com/">
-      - Nestjs &nbsp;<img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/NestJS.svg" width="18" height="18">
+      Nestjs &nbsp;<img src="https://upload.wikimedia.org/wikipedia/commons/a/a8/NestJS.svg" width="18" height="18">
     </a>
   </li>
   <li>
     <a href="https://www.prisma.io/">
-      - Prisma.io &nbsp;<img src="https://i.pinimg.com/originals/39/b2/e4/39b2e4ad77c23a2c11e5950a7dfa2aec.png" width="15" height="15">
+      Prisma.io &nbsp;<img src="https://i.pinimg.com/originals/39/b2/e4/39b2e4ad77c23a2c11e5950a7dfa2aec.png" width="15" height="15">
     </a>
   </li>
 </ul>
