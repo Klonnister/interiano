@@ -119,12 +119,6 @@ export class ProductsController {
     @Param('id', ExistentProductPipe) id: number,
     @Body(ValidProductPipe) data: productDTO,
   ): Promise<Product> {
-    const product = await this.productsService.getProductById(id);
-
-    if (product.image !== data.image) {
-      unlinkSync(`./public${product.image}`);
-    }
-
     return await this.productsService.updateProduct(id, data);
   }
 

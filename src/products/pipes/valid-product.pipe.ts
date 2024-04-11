@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { CategoriesService } from 'src/categories/categories.service';
 import { TrademarksService } from 'src/trademarks/trademarks.service';
 import { productDTO } from '../dto/product.dto';
+import { existsSync } from 'fs';
 
 @Injectable()
 export class ValidProductPipe implements PipeTransform {
@@ -22,6 +23,12 @@ export class ValidProductPipe implements PipeTransform {
     );
     if (!trademark)
       throw new BadRequestException('Seleccione una marca existente.');
+
+    const validImage = existsSync(`./public${product.image}`);
+    if (!validImage)
+      throw new BadRequestException(
+        'Error al guardar la imagen. Por favor seleccione otra.',
+      );
 
     return product;
   }

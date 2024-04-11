@@ -3,6 +3,7 @@ import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { paginate } from 'src/prisma/helpers/paginator';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class ProductsService {
@@ -92,15 +93,27 @@ export class ProductsService {
     }
   }
 
-  updateProduct(id: number, data: productDTO): Promise<Product> {
+  async updateProduct(id: number, data: productDTO): Promise<Product> {
     try {
-      return this.prisma.product.update({
+      const product = await this.getProductById(id);
+      const previousImage = product.image;
+
+      const updatedProduct = await this.prisma.product.update({
         where: { id },
         data: {
           ...data,
           applied_price: data.sale ? data.sale_price : data.price,
         },
       });
+
+      if (
+        previousImage !== data.image &&
+        existsSync(`./public${previousImage}`)
+      ) {
+        unlinkSync(`./public${previousImage}`);
+      }
+
+      return updatedProduct;
     } catch (error) {
       throw new BadRequestException(
         'Se recibió información no esperada. Por favor revise.',
