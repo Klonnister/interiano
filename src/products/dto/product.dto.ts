@@ -117,20 +117,3 @@ export class productDTO {
   })
   design: number;
 }
-
-// {
-//   "category_id": 1,
-//   "trademark_id": 1,
-//   "title": "Anticaída y fortalecimiento",
-//   "images": "/1705009444448.jpg",
-//   "size": "650 ml",
-//   "description": "El mejor shampoo para cabello dañado, nutre desde raíz a puntas y ayuda al fortalecimiento completo del cabello",
-//   "stock": 2,
-//   "price": 80.52,
-//   "sale": false,
-//   "sale_price": 0,
-//   "extra_props": {
-//     "tamaño": "Mediano"
-//   },
-//   "design": 1
-// }

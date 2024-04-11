@@ -46,6 +46,7 @@ async function main() {
         price: 65,
         sale: false,
         sale_price: 0,
+        applied_price: 65,
         extra_props: {
           linea: 'Pro-V',
         },
@@ -63,6 +64,7 @@ async function main() {
         price: 55,
         sale: true,
         sale_price: 40,
+        applied_price: 40,
         extra_props: {},
         design: 1,
       },
@@ -78,6 +80,7 @@ async function main() {
         price: 60,
         sale: false,
         sale_price: 0,
+        applied_price: 60,
         extra_props: {},
         design: 1,
       },

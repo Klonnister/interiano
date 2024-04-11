@@ -36,21 +36,22 @@ model Trademark {
 }
 
 model Product {
-  id           Int       @id @default(autoincrement())
-  category     Category  @relation(fields:[category_id], references:[id])
-  category_id  Int
-  trademark    Trademark @relation(fields:[trademark_id], references:[id])
-  trademark_id Int
-  title        String
-  image        String
-  size         String?
-  description  String?   @db.Text
-  stock        Int       @default(1)
-  extra_props  Json
-  price        Decimal   @db.Decimal(6,2)
-  sale         Boolean   @default(false)
-  sale_price   Decimal   @db.Decimal(6,2) @default(0)
-  design       Int
+  id            Int       @id @default(autoincrement())
+  category      Category  @relation(fields:[category_id], references:[id])
+  category_id   Int
+  trademark     Trademark @relation(fields:[trademark_id], references:[id])
+  trademark_id  Int
+  title         String
+  image         String
+  size          String?
+  description   String?   @db.Text
+  stock         Int       @default(1)
+  extra_props   Json
+  price         Decimal   @db.Decimal(6,2)
+  sale          Boolean   @default(false)
+  sale_price    Decimal   @db.Decimal(6,2) @default(0)
+  applied_price Decimal?   @db.Decimal(6,2)
+  design        Int
 
   @@map("products")
 }

@@ -1,7 +1,7 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { paginate } from 'src/prisma/helpers/paginator';
 
 @Injectable()
@@ -34,7 +34,7 @@ export class ProductsService {
           trademark_id: {
             in: trademarks,
           },
-          price: {
+          applied_price: {
             gte: priceMin,
             lte: priceMax,
           },
@@ -78,16 +78,34 @@ export class ProductsService {
   }
 
   async createProduct(data: productDTO): Promise<Product> {
-    return this.prisma.product.create({
-      data,
-    });
+    try {
+      return await this.prisma.product.create({
+        data: {
+          ...data,
+          applied_price: data.sale ? data.sale_price : data.price,
+        },
+      });
+    } catch (error) {
+      throw new BadRequestException(
+        'Se recibió información no esperada. Por favor revise.',
+      );
+    }
   }
 
   updateProduct(id: number, data: productDTO): Promise<Product> {
-    return this.prisma.product.update({
-      where: { id },
-      data,
-    });
+    try {
+      return this.prisma.product.update({
+        where: { id },
+        data: {
+          ...data,
+          applied_price: data.sale ? data.sale_price : data.price,
+        },
+      });
+    } catch (error) {
+      throw new BadRequestException(
+        'Se recibió información no esperada. Por favor revise.',
+      );
+    }
   }
 
   deleteProduct(id: number): Promise<Product> {
