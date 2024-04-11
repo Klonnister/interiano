@@ -127,7 +127,10 @@ export class ProductsController {
     @Param('id', ExistentProductPipe) id: number,
   ): Promise<Product> {
     const product = await this.productsService.getProductById(id);
-    unlinkSync(`./public${product.image}`);
+
+    if (existsSync(`./public${product.image}`)) {
+      unlinkSync(`./public${product.image}`);
+    }
     return await this.productsService.deleteProduct(id);
   }
 }
