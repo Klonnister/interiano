@@ -34,6 +34,7 @@ export class ProfileService {
       );
 
       if (
+        previousImage &&
         previousImage !== data.image &&
         existsSync(`./public${previousImage}`)
       ) {
