@@ -6,7 +6,7 @@ import { paginate } from 'src/prisma/helpers/paginator';
 
 @Injectable()
 export class TrademarksService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async getTrademarks(name: string, page: number) {
     return paginate(

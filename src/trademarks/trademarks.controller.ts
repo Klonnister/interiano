@@ -24,7 +24,7 @@ import getImageOptions from '../images/helpers/imageOptionsHelper';
 
 @Controller('trademarks')
 export class TrademarksController {
-  constructor(private trademarksService: TrademarksService) {}
+  constructor(private readonly trademarksService: TrademarksService) {}
 
   @Get()
   getTrademarks(
