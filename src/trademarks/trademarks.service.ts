@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Trademark } from '@prisma/client';
 import { TrademarkDTO } from './dto/trademark.dto';
-import { paginate } from 'src/prisma/paginator';
+import { paginate } from 'src/prisma/helpers/paginator';
 
 @Injectable()
 export class TrademarksService {

@@ -11,7 +11,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { existsSync, readdir, readdirSync, unlinkSync } from 'fs';
 import { Public } from 'src/auth/decorators/public.decorator';
-import getImageOptions from 'src/images/imageOptionsHelper';
+import getImageOptions from 'src/images/helpers/imageOptionsHelper';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 
 @Controller('guest')

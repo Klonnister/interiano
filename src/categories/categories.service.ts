@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Category } from '@prisma/client';
 import { CategoryDTO } from './dto/category.dto';
-import { paginate } from 'src/prisma/paginator';
+import { paginate } from 'src/prisma/helpers/paginator';
 
 @Injectable()
 export class CategoriesService {

@@ -21,7 +21,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { existsSync, unlinkSync } from 'fs';
 import { ValidProductPipe } from './pipes/valid-product.pipe';
 import { ExistentProductPipe } from './pipes/existent-product.pipe';
-import getImageOptions from '../images/imageOptionsHelper';
+import getImageOptions from '../images/helpers/imageOptionsHelper';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 
 @Controller('products')

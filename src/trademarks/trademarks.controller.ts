@@ -20,7 +20,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidTrademarkPipe } from './pipes/valid-trademark.pipe';
 import { existsSync, unlinkSync } from 'fs';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
-import getImageOptions from '../images/imageOptionsHelper';
+import getImageOptions from '../images/helpers/imageOptionsHelper';
 
 @Controller('trademarks')
 export class TrademarksController {

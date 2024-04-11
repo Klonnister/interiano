@@ -13,7 +13,7 @@ import { ProfileDto, UpdatePasswordDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
 import { existsSync, unlinkSync } from 'fs';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
-import getImageOptions from '../images/imageOptionsHelper';
+import getImageOptions from '../images/helpers/imageOptionsHelper';
 
 @Controller('profile')
 export class ProfileController {

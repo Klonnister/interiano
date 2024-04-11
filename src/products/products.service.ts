@@ -2,7 +2,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { Injectable } from '@nestjs/common';
-import { paginate } from 'src/prisma/paginator';
+import { paginate } from 'src/prisma/helpers/paginator';
 
 @Injectable()
 export class ProductsService {
