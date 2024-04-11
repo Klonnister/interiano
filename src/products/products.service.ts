@@ -1,7 +1,8 @@
-import { PrismaService, prisma } from '../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { Injectable } from '@nestjs/common';
+import { paginate } from 'src/prisma/paginator';
 
 @Injectable()
 export class ProductsService {
@@ -17,8 +18,9 @@ export class ProductsService {
     sale: boolean,
     page: number,
   ) {
-    const [products, meta] = await prisma.product
-      .paginate({
+    return paginate(
+      this.prisma.product,
+      {
         where: {
           title: {
             contains: title,
@@ -42,14 +44,11 @@ export class ProductsService {
           category: true,
           trademark: true,
         },
-      })
-      .withPages({
-        limit: 12,
-        includePageCount: true,
-        page: page ? page : 1,
-      });
-
-    return { products, meta };
+      },
+      {
+        page,
+      },
+    );
   }
 
   getProductsByTrademark(trademark_id: number): Promise<Product[]> {

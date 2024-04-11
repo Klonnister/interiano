@@ -2,28 +2,26 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Category } from '@prisma/client';
 import { CategoryDTO } from './dto/category.dto';
-import { prisma } from '../prisma/prisma.service';
+import { paginate } from 'src/prisma/paginator';
 
 @Injectable()
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
   async getCategories(name: string, page: number) {
-    const [categories, meta] = await prisma.category
-      .paginate({
+    return paginate(
+      this.prisma.category,
+      {
         where: {
           name: {
             contains: name,
           },
         },
-      })
-      .withPages({
-        limit: 12,
-        includePageCount: true,
-        page: page ? page : 1,
-      });
-
-    return { categories, meta };
+      },
+      {
+        page,
+      },
+    );
   }
 
   getCategoryById(id: number): Promise<Category> {

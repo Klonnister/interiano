@@ -1,28 +1,27 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService, prisma } from '../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Trademark } from '@prisma/client';
 import { TrademarkDTO } from './dto/trademark.dto';
+import { paginate } from 'src/prisma/paginator';
 
 @Injectable()
 export class TrademarksService {
   constructor(private prisma: PrismaService) {}
 
   async getTrademarks(name: string, page: number) {
-    const [trademarks, meta] = await prisma.trademark
-      .paginate({
+    return paginate(
+      this.prisma.trademark,
+      {
         where: {
           name: {
             contains: name,
           },
         },
-      })
-      .withPages({
-        limit: 12,
-        includePageCount: true,
-        page: page ? page : 1,
-      });
-
-    return { trademarks, meta };
+      },
+      {
+        page,
+      },
+    );
   }
 
   getTrademarkById(id: number): Promise<Trademark> {
