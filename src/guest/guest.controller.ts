@@ -9,9 +9,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { existsSync, readdir, readdirSync, unlinkSync } from 'fs';
+import { readdir, readdirSync, unlinkSync } from 'fs';
 import { Public } from 'src/auth/decorators/public.decorator';
 import getImageOptions from 'src/images/helpers/imageOptionsHelper';
+import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 
 @Controller('guest')
@@ -25,9 +26,7 @@ export class GuestController {
     @UploadedFile(ValidImagePipe) images: Express.Multer.File,
     @Body('previousImage') previousImage: string,
   ) {
-    if (previousImage && existsSync(`./public${previousImage}`)) {
-      unlinkSync(`./public${previousImage}`);
-    }
+    if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
     return `/guest-imgs/${images.filename}`;
   }

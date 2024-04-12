@@ -11,10 +11,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { User } from 'src/users/decorators/user.decorator';
 import { ProfileDto, UpdatePasswordDto } from './dto/profile.dto';
 import { ProfileService } from './profile.service';
-import { existsSync, unlinkSync } from 'fs';
+import { unlinkSync } from 'fs';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 import getImageOptions from '../images/helpers/imageOptionsHelper';
 import { ValidProfilePipe } from './pipes/valid-profile.pipe';
+import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 
 @Controller('profile')
 export class ProfileController {
@@ -33,9 +34,7 @@ export class ProfileController {
     @UploadedFile(ValidImagePipe) images: Express.Multer.File,
     @Body('previousImage') previousImage: string,
   ): Promise<string> {
-    if (previousImage && existsSync(`./public${previousImage}`)) {
-      unlinkSync(`./public${previousImage}`);
-    }
+    if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
     return `/profile-imgs/${images.filename}`;
   }

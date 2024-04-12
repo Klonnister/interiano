@@ -3,7 +3,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Trademark } from '@prisma/client';
 import { TrademarkDTO } from './dto/trademark.dto';
 import { paginate } from 'src/prisma/helpers/paginator';
-import { existsSync, unlinkSync } from 'fs';
+import { unlinkSync } from 'fs';
+import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 
 @Injectable()
 export class TrademarksService {
@@ -65,11 +66,7 @@ export class TrademarksService {
         data,
       });
 
-      if (
-        previousImage &&
-        previousImage !== data.image &&
-        existsSync(`./public${previousImage}`)
-      ) {
+      if (previousImage !== data.image && isDeletablePath(previousImage)) {
         unlinkSync(`./public${previousImage}`);
       }
 

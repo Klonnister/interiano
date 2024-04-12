@@ -18,11 +18,12 @@ import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { existsSync, unlinkSync } from 'fs';
+import { unlinkSync } from 'fs';
 import { ValidProductPipe } from './pipes/valid-product.pipe';
 import { ExistentProductPipe } from './pipes/existent-product.pipe';
 import getImageOptions from '../images/helpers/imageOptionsHelper';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
+import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 
 @Controller('products')
 export class ProductsController {
@@ -100,9 +101,7 @@ export class ProductsController {
     @UploadedFile(ValidImagePipe) images: Express.Multer.File,
     @Body('previousImage') previousImage: string,
   ) {
-    if (previousImage && existsSync(`./public${previousImage}`)) {
-      unlinkSync(`./public${previousImage}`);
-    }
+    if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
     return `/product-imgs/${images.filename}`;
   }
@@ -128,9 +127,7 @@ export class ProductsController {
   ): Promise<Product> {
     const product = await this.productsService.getProductById(id);
 
-    if (existsSync(`./public${product.image}`)) {
-      unlinkSync(`./public${product.image}`);
-    }
+    if (isDeletablePath(product.image)) unlinkSync(`./public${product.image}`);
     return await this.productsService.deleteProduct(id);
   }
 }

@@ -3,7 +3,8 @@ import { Product } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { paginate } from 'src/prisma/helpers/paginator';
-import { existsSync, unlinkSync } from 'fs';
+import { unlinkSync } from 'fs';
+import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 
 @Injectable()
 export class ProductsService {
@@ -106,10 +107,7 @@ export class ProductsService {
         },
       });
 
-      if (
-        previousImage !== data.image &&
-        existsSync(`./public${previousImage}`)
-      ) {
+      if (previousImage !== data.image && isDeletablePath(previousImage)) {
         unlinkSync(`./public${previousImage}`);
       }
 

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { TrademarksService } from '../trademarks.service';
 import { TrademarkDTO } from '../dto/trademark.dto';
-import { existsSync } from 'fs';
+import { isAssignablePath } from 'src/images/helpers/imagePathHelpers';
 
 @Injectable()
 export class ExistentTrademarkPipe implements PipeTransform {
@@ -17,10 +17,11 @@ export class ExistentTrademarkPipe implements PipeTransform {
       throw new BadRequestException('Esta marca ya existe');
     }
 
-    if (image && !existsSync(`./public${image}`))
+    if (!isAssignablePath(image)) {
       throw new BadRequestException(
-        'Error al guardar imagen, seleccione otra.',
+        'Error al guardar imagen. Seleccione otra.',
       );
+    }
 
     return data;
   }

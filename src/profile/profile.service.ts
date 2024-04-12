@@ -6,9 +6,9 @@ import {
 import { UsersService } from 'src/users/users.service';
 import { ProfileDto, UpdatePasswordDto } from './dto/profile.dto';
 import { JwtService } from '@nestjs/jwt';
-
 import * as bcrypt from 'bcrypt';
-import { existsSync, unlinkSync } from 'fs';
+import { unlinkSync } from 'fs';
+import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 
 @Injectable()
 export class ProfileService {
@@ -33,11 +33,7 @@ export class ProfileService {
         data,
       );
 
-      if (
-        previousImage &&
-        previousImage !== data.image &&
-        existsSync(`./public${previousImage}`)
-      ) {
+      if (previousImage !== data.image && isDeletablePath(previousImage)) {
         unlinkSync(`./public${previousImage}`);
       }
       return updatedProfile;

@@ -19,9 +19,13 @@ import { ExistentTrademarkPipe } from './pipes/existent-trademark.pipe';
 import { DeletableTrademarkPipe } from './pipes/deletable-trademark.pipe';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ValidTrademarkPipe } from './pipes/valid-trademark.pipe';
-import { existsSync, unlinkSync } from 'fs';
+import { unlinkSync } from 'fs';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 import getImageOptions from '../images/helpers/imageOptionsHelper';
+import {
+  isAssignablePath,
+  isDeletablePath,
+} from 'src/images/helpers/imagePathHelpers';
 
 @Controller('trademarks')
 export class TrademarksController {
@@ -50,9 +54,7 @@ export class TrademarksController {
     @UploadedFile(ValidImagePipe) images: Express.Multer.File,
     @Body('previousImage') previousImage: string,
   ) {
-    if (previousImage && existsSync(`./public${previousImage}`)) {
-      unlinkSync(`./public${previousImage}`);
-    }
+    if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
     return `/trademark-imgs/${images.filename}`;
   }
@@ -69,7 +71,7 @@ export class TrademarksController {
     @Param('id', ValidTrademarkPipe) id: number,
     @Body() data: TrademarkDTO,
   ): Promise<Trademark> {
-    if (data.image && !existsSync(`./public${data.image}`))
+    if (!isAssignablePath(data.image))
       throw new BadRequestException(
         'Error al guardar imagen, seleccione otra.',
       );
@@ -82,7 +84,7 @@ export class TrademarksController {
     @Param('id', DeletableTrademarkPipe) id: number,
   ): Promise<Trademark> {
     const trademark = await this.getTrademarkById(id);
-    if (trademark.image && existsSync(`./public${trademark.image}`)) {
+    if (isDeletablePath(trademark.image)) {
       unlinkSync(`./public${trademark.image}`);
     }
 
