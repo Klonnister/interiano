@@ -17,6 +17,9 @@ export class CategoriesService {
             contains: name,
           },
         },
+        orderBy: {
+          name: 'asc',
+        },
       },
       {
         page,

@@ -19,6 +19,9 @@ export class TrademarksService {
             contains: name,
           },
         },
+        orderBy: {
+          name: 'asc',
+        },
       },
       {
         page,
