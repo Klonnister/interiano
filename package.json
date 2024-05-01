@@ -1,5 +1,5 @@
 {
-  "name": "lidia",
+  "name": "interiano",
   "version": "0.0.1",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
