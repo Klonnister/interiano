@@ -15,7 +15,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
-import { Product } from '@prisma/client';
+import { Product, Trademark } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { unlinkSync } from 'fs';
@@ -83,6 +83,51 @@ export class ProductsController {
       priceMax,
       sale,
       page,
+    );
+  }
+
+  @Get('trademarks')
+  async getProductsTrademarks(
+    @Query(
+      'categories',
+      new ParseArrayPipe({
+        items: Number,
+        separator: ',',
+        optional: true,
+      }),
+    )
+    categories: number[],
+    @Query('title') title: string,
+    @Query('size') size: string,
+    @Query(
+      'priceMin',
+      new ParseFloatPipe({
+        optional: true,
+      }),
+    )
+    priceMin: number,
+    @Query(
+      'priceMax',
+      new ParseFloatPipe({
+        optional: true,
+      }),
+    )
+    priceMax: number,
+    @Query(
+      'sale',
+      new ParseBoolPipe({
+        optional: true,
+      }),
+    )
+    sale: boolean,
+  ): Promise<Trademark[]> {
+    return await this.productsService.getProductsTrademarks(
+      categories,
+      title,
+      size,
+      priceMin,
+      priceMax,
+      sale,
     );
   }
 

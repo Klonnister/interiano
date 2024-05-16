@@ -53,6 +53,43 @@ export class ProductsService {
     );
   }
 
+  async getProductsTrademarks(
+    categories: number[],
+    title: string,
+    size: string,
+    priceMin: number,
+    priceMax: number,
+    sale: boolean,
+  ) {
+    const rawTrademarks = await this.prisma.product.findMany({
+      where: {
+        title: {
+          contains: title,
+        },
+        size: {
+          contains: size,
+        },
+        category_id: {
+          in: categories,
+        },
+        applied_price: {
+          gte: priceMin,
+          lte: priceMax,
+        },
+        sale,
+      },
+      select: { trademark: true },
+    });
+
+    return rawTrademarks.map((rawTrademark) => {
+      return {
+        id: rawTrademark.trademark.id,
+        name: rawTrademark.trademark.name,
+        image: rawTrademark.trademark.image,
+      };
+    });
+  }
+
   getProductsByTrademark(trademark_id: number): Promise<Product[]> {
     return this.prisma.product.findMany({
       where: {
