@@ -87,7 +87,7 @@ export class ProductsController {
   }
 
   @Get('trademarks')
-  async getProductsTrademarks(
+  async getProductsTrademark(
     @Query(
       'categories',
       new ParseArrayPipe({
@@ -121,7 +121,7 @@ export class ProductsController {
     )
     sale: boolean,
   ): Promise<Trademark[]> {
-    return await this.productsService.getProductsTrademarks(
+    return await this.productsService.getProductsTrademark(
       categories,
       title,
       size,

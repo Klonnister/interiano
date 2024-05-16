@@ -1,5 +1,5 @@
 import { PrismaService } from '../prisma/prisma.service';
-import { Product } from '@prisma/client';
+import { Product, Trademark } from '@prisma/client';
 import { productDTO } from './dto/product.dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { paginate } from 'src/prisma/helpers/paginator';
@@ -53,15 +53,15 @@ export class ProductsService {
     );
   }
 
-  async getProductsTrademarks(
+  async getProductsTrademark(
     categories: number[],
     title: string,
     size: string,
     priceMin: number,
     priceMax: number,
     sale: boolean,
-  ) {
-    const rawTrademarks = await this.prisma.product.findMany({
+  ): Promise<Trademark[]> {
+    const productsTrademark = await this.prisma.product.findMany({
       where: {
         title: {
           contains: title,
@@ -81,7 +81,7 @@ export class ProductsService {
       select: { trademark: true },
     });
 
-    return rawTrademarks.map((rawTrademark) => {
+    return productsTrademark.map((rawTrademark) => {
       return {
         id: rawTrademark.trademark.id,
         name: rawTrademark.trademark.name,
