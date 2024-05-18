@@ -178,7 +178,7 @@ async function main() {
         category_id: 4,
         trademark_id: 4,
         title: 'Crema corporal Nourishing Body Care NutriDUO',
-        image: '/product-imgs/product8.webp',
+        image: '/product-imgs/product8.png',
         size: '300ml',
         description:
           'La crema corporal Dove trae suavidad a tu piel y humecta.',
@@ -227,22 +227,6 @@ async function main() {
           tipo: 'Anti-manchas',
         },
         design: 1,
-      },
-      {
-        category_id: 5,
-        trademark_id: 4,
-        title: 'Desodorante Rexona clinical Expert.',
-        image: '/product-imgs/product11.webp',
-        size: '46g',
-        description:
-          'Desodorante Clinial de barra y crema antitranspirante. Más protección.',
-        stock: 4,
-        price: 40,
-        sale: false,
-        sale_price: 0,
-        applied_price: 40,
-        extra_props: {},
-        design: 5,
       },
       {
         category_id: 5,
