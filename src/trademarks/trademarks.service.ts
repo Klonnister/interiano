@@ -72,12 +72,12 @@ export class TrademarksService {
       select: { trademark: true },
     });
 
-    const trademarks = [];
+    const trademarkIds = [];
 
     return productsTrademark
       .map((rawTrademark) => {
-        if (!trademarks.includes(rawTrademark.trademark.id)) {
-          trademarks.push(rawTrademark.trademark.id);
+        if (!trademarkIds.includes(rawTrademark.trademark.id)) {
+          trademarkIds.push(rawTrademark.trademark.id);
           return {
             id: rawTrademark.trademark.id,
             name: rawTrademark.trademark.name,
