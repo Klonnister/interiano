@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Patch,
   Post,
@@ -23,9 +24,16 @@ export class CategoriesController {
   @Get()
   getCategories(
     @Query('name') name: string,
+    @Query(
+      'raw',
+      new ParseBoolPipe({
+        optional: true,
+      }),
+    )
+    raw: boolean,
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
   ) {
-    return this.categoriesService.getCategories(name, page);
+    return this.categoriesService.getCategories(name, raw, page);
   }
 
   @Get(':id')

@@ -8,7 +8,20 @@ import { paginate } from 'src/prisma/helpers/paginator';
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getCategories(name: string, page: number) {
+  async getCategories(name: string, raw: boolean, page: number) {
+    if (raw) {
+      return this.prisma.category.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+        orderBy: {
+          name: 'asc',
+        },
+      });
+    }
+
     return paginate(
       this.prisma.category,
       {
