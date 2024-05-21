@@ -1,3 +1,5 @@
+import { Trademark } from '@prisma/client';
+
 export interface PaginatedResult<T> {
   data: T[];
   meta: {
@@ -8,6 +10,7 @@ export interface PaginatedResult<T> {
     prev: number | null;
     next: number | null;
   };
+  trademarks: Trademark[];
 }
 
 export type PaginateOptions = {
@@ -19,12 +22,18 @@ export type PaginateFunction = <T, K>(
   model: any,
   args?: K,
   options?: PaginateOptions,
+  trademarks?: Trademark[],
 ) => Promise<PaginatedResult<T>>;
 
 export const paginator = (
   defaultOptions: PaginateOptions,
 ): PaginateFunction => {
-  return async (model, args: any = { where: undefined }, options) => {
+  return async (
+    model,
+    args: any = { where: undefined },
+    options,
+    trademarks,
+  ) => {
     const page = Number(options?.page || defaultOptions?.page) || 1;
     const perPage = Number(options?.perPage || defaultOptions?.perPage) || 10;
 
@@ -49,6 +58,7 @@ export const paginator = (
         prev: page > 1 ? page - 1 : null,
         next: page < lastPage ? page + 1 : null,
       },
+      trademarks,
     };
   };
 };

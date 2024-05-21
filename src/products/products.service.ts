@@ -20,6 +20,46 @@ export class ProductsService {
     sale: boolean,
     page: number,
   ) {
+    const productsTrademark = await this.prisma.product.findMany({
+      where: {
+        title: {
+          contains: title,
+        },
+        size: {
+          contains: size,
+        },
+        category_id: {
+          in: categories,
+        },
+        applied_price: {
+          gte: priceMin,
+          lte: priceMax,
+        },
+        sale,
+      },
+      orderBy: {
+        trademark: {
+          name: 'asc',
+        },
+      },
+      select: { trademark: true },
+    });
+
+    const trademarkIds = [];
+
+    const filterTrademarks = productsTrademark
+      .map((rawTrademark) => {
+        if (!trademarkIds.includes(rawTrademark.trademark.id)) {
+          trademarkIds.push(rawTrademark.trademark.id);
+          return {
+            id: rawTrademark.trademark.id,
+            name: rawTrademark.trademark.name,
+            image: rawTrademark.trademark.image,
+          };
+        }
+      })
+      .filter((trademark) => trademark != null);
+
     return paginate(
       this.prisma.product,
       {
@@ -42,6 +82,9 @@ export class ProductsService {
           },
           sale,
         },
+        // orderBy: {
+        //   applied_price: 'desc',
+        // },
         include: {
           category: true,
           trademark: true,
@@ -50,6 +93,7 @@ export class ProductsService {
       {
         page,
       },
+      filterTrademarks,
     );
   }
 

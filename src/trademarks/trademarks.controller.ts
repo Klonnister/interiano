@@ -5,9 +5,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseArrayPipe,
-  ParseBoolPipe,
-  ParseFloatPipe,
   ParseIntPipe,
   Patch,
   Post,
@@ -40,61 +37,6 @@ export class TrademarksController {
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
   ) {
     return this.trademarksService.getTrademarks(name, page);
-  }
-
-  @Get('products')
-  async getProductsTrademark(
-    @Query(
-      'ids',
-      new ParseArrayPipe({
-        items: Number,
-        separator: ',',
-        optional: true,
-      }),
-    )
-    ids: number[],
-    @Query(
-      'categories',
-      new ParseArrayPipe({
-        items: Number,
-        separator: ',',
-        optional: true,
-      }),
-    )
-    categories: number[],
-    @Query('title') title: string,
-    @Query('size') size: string,
-    @Query(
-      'priceMin',
-      new ParseFloatPipe({
-        optional: true,
-      }),
-    )
-    priceMin: number,
-    @Query(
-      'priceMax',
-      new ParseFloatPipe({
-        optional: true,
-      }),
-    )
-    priceMax: number,
-    @Query(
-      'sale',
-      new ParseBoolPipe({
-        optional: true,
-      }),
-    )
-    sale: boolean,
-  ): Promise<Trademark[]> {
-    return await this.trademarksService.getProductsTrademark(
-      ids,
-      categories,
-      title,
-      size,
-      priceMin,
-      priceMax,
-      sale,
-    );
   }
 
   @Get(':id')

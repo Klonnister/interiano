@@ -35,59 +35,6 @@ export class TrademarksService {
     });
   }
 
-  async getProductsTrademark(
-    ids: number[],
-    categories: number[],
-    title: string,
-    size: string,
-    priceMin: number,
-    priceMax: number,
-    sale: boolean,
-  ): Promise<Trademark[]> {
-    const productsTrademark = await this.prisma.product.findMany({
-      where: {
-        id: {
-          in: ids,
-        },
-        title: {
-          contains: title,
-        },
-        size: {
-          contains: size,
-        },
-        category_id: {
-          in: categories,
-        },
-        applied_price: {
-          gte: priceMin,
-          lte: priceMax,
-        },
-        sale,
-      },
-      orderBy: {
-        trademark: {
-          name: 'asc',
-        },
-      },
-      select: { trademark: true },
-    });
-
-    const trademarkIds = [];
-
-    return productsTrademark
-      .map((rawTrademark) => {
-        if (!trademarkIds.includes(rawTrademark.trademark.id)) {
-          trademarkIds.push(rawTrademark.trademark.id);
-          return {
-            id: rawTrademark.trademark.id,
-            name: rawTrademark.trademark.name,
-            image: rawTrademark.trademark.image,
-          };
-        }
-      })
-      .filter((trademark) => trademark != null);
-  }
-
   getTrademarkByName(name: string): Promise<Trademark> {
     return this.prisma.trademark.findFirst({
       where: { name },
