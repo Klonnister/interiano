@@ -236,7 +236,7 @@ async function main() {
         size: '46g',
         description:
           'Desodorante Clinial de barra y crema antitranspirante. Más protección.',
-        stock: 4,
+        stock: 0,
         price: 40,
         sale: false,
         sale_price: 0,
