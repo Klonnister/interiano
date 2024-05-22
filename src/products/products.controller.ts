@@ -24,6 +24,8 @@ import { ExistentProductPipe } from './pipes/existent-product.pipe';
 import getImageOptions from '../images/helpers/imageOptionsHelper';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
+import { ProductOrderByPipe } from './pipes/product-order-by.pipe';
+import { OrderBy } from './types/orderBy.interface';
 
 @Controller('products')
 export class ProductsController {
@@ -73,6 +75,9 @@ export class ProductsController {
     )
     sale: boolean,
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
+    @Query('order', ProductOrderByPipe) order: OrderBy,
+    @Query('onlyStock', new ParseBoolPipe({ optional: true }))
+    onlyStock: boolean,
   ) {
     return this.productsService.getProducts(
       categories,
@@ -82,6 +87,8 @@ export class ProductsController {
       priceMin,
       priceMax,
       sale,
+      order,
+      onlyStock,
       page,
     );
   }

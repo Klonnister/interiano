@@ -5,6 +5,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { paginate } from 'src/prisma/helpers/paginator';
 import { unlinkSync } from 'fs';
 import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
+import { OrderBy } from './types/orderBy.interface';
 
 @Injectable()
 export class ProductsService {
@@ -18,6 +19,8 @@ export class ProductsService {
     priceMin: number,
     priceMax: number,
     sale: boolean,
+    order: OrderBy,
+    onlyStock: boolean,
     page: number,
   ) {
     const productsTrademark = await this.prisma.product.findMany({
@@ -36,12 +39,11 @@ export class ProductsService {
           lte: priceMax,
         },
         sale,
-      },
-      orderBy: {
-        trademark: {
-          name: 'asc',
+        stock: {
+          gte: onlyStock ? 1 : 0,
         },
       },
+      orderBy: { trademark: { name: 'asc' } },
       select: { trademark: true },
     });
 
@@ -81,10 +83,11 @@ export class ProductsService {
             lte: priceMax,
           },
           sale,
+          stock: {
+            gte: onlyStock ? 1 : 0,
+          },
         },
-        // orderBy: {
-        //   applied_price: 'desc',
-        // },
+        orderBy: order,
         include: {
           category: true,
           trademark: true,
