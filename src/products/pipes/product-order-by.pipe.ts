@@ -3,7 +3,7 @@ import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 @Injectable()
 export class ProductOrderByPipe implements PipeTransform {
   transform(order: string) {
-    if (!order) return { applied_price: 'asc' };
+    if (!order) return { trademark: { name: 'asc' } };
 
     const orderArr: string[] = order.split(',');
     if (orderArr.length <= 1)
