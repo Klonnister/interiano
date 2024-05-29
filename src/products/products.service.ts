@@ -6,6 +6,7 @@ import { paginate } from 'src/prisma/helpers/paginator';
 import { unlinkSync } from 'fs';
 import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 import { OrderBy } from './types/orderBy.interface';
+import { ProductOptions } from './types/productOptions.interface';
 
 @Injectable()
 export class ProductsService {
@@ -106,6 +107,13 @@ export class ProductsService {
         trademark_id,
       },
     });
+  }
+
+  async getProductOptions(): Promise<ProductOptions> {
+    const categories = await this.prisma.category.findMany();
+    const trademarks = await this.prisma.trademark.findMany();
+
+    return { categories, trademarks };
   }
 
   getProductsByCategory(category_id: number): Promise<Product[]> {

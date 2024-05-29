@@ -26,6 +26,7 @@ import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 import { ProductOrderByPipe } from './pipes/product-order-by.pipe';
 import { OrderBy } from './types/orderBy.interface';
+import { ProductOptions } from './types/productOptions.interface';
 
 @Controller('products')
 export class ProductsController {
@@ -91,6 +92,11 @@ export class ProductsController {
       onlyStock,
       page,
     );
+  }
+
+  @Get('create')
+  getProductOptions(): Promise<ProductOptions> {
+    return this.productsService.getProductOptions();
   }
 
   @Get(':id')
