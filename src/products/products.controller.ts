@@ -116,7 +116,7 @@ export class ProductsController {
   ) {
     if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
-    return `/product-imgs/${images.filename}`;
+    return { path: `/product-imgs/${images.filename}` };
   }
 
   @Post()

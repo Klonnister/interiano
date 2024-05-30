@@ -28,7 +28,7 @@ export class GuestController {
   ) {
     if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
-    return `/guest-imgs/${images.filename}`;
+    return { path: `/guest-imgs/${images.filename}` };
   }
 
   @Get()

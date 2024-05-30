@@ -33,10 +33,10 @@ export class ProfileController {
   async uploadProfileImage(
     @UploadedFile(ValidImagePipe) images: Express.Multer.File,
     @Body('previousImage') previousImage: string,
-  ): Promise<string> {
+  ) {
     if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
-    return `/profile-imgs/${images.filename}`;
+    return { path: `/profile-imgs/${images.filename}` };
   }
 
   @Patch()

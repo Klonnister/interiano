@@ -56,7 +56,7 @@ export class TrademarksController {
   ) {
     if (isDeletablePath(previousImage)) unlinkSync(`./public${previousImage}`);
 
-    return `/trademark-imgs/${images.filename}`;
+    return { path: `/trademark-imgs/${images.filename}` };
   }
 
   @Post()
