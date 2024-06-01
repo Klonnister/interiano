@@ -27,6 +27,9 @@ import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 import { ProductOrderByPipe } from './pipes/product-order-by.pipe';
 import { OrderBy } from './types/orderBy.interface';
 import { ProductOptions } from './types/productOptions.interface';
+import { ProductStockPipe } from './pipes/product-stock.pipe';
+import { ProductDiscontinuedPipe } from './pipes/product-discontinued.pipe';
+import { Stock } from './types/stock.interface';
 
 @Controller('products')
 export class ProductsController {
@@ -77,8 +80,9 @@ export class ProductsController {
     sale: boolean,
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
     @Query('order', ProductOrderByPipe) order: OrderBy,
-    @Query('onlyStock', new ParseBoolPipe({ optional: true }))
-    onlyStock: boolean,
+    @Query('stock', ProductStockPipe) stock: number | Stock | undefined,
+    @Query('discontinued', ProductDiscontinuedPipe)
+    discontinued: boolean | undefined,
   ) {
     return this.productsService.getProducts(
       categories,
@@ -89,7 +93,8 @@ export class ProductsController {
       priceMax,
       sale,
       order,
-      onlyStock,
+      stock,
+      discontinued,
       page,
     );
   }

@@ -7,6 +7,7 @@ import { unlinkSync } from 'fs';
 import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
 import { OrderBy } from './types/orderBy.interface';
 import { ProductOptions } from './types/productOptions.interface';
+import { Stock } from './types/stock.interface';
 
 @Injectable()
 export class ProductsService {
@@ -21,7 +22,8 @@ export class ProductsService {
     priceMax: number,
     sale: boolean,
     order: OrderBy,
-    onlyStock: boolean,
+    stock: number | Stock | undefined,
+    discontinued: boolean | undefined,
     page: number,
   ) {
     const productsTrademark = await this.prisma.product.findMany({
@@ -40,9 +42,8 @@ export class ProductsService {
           lte: priceMax,
         },
         sale,
-        stock: {
-          gte: onlyStock ? 1 : 0,
-        },
+        stock,
+        discontinued,
       },
       orderBy: { trademark: { name: 'asc' } },
       select: { trademark: true },
@@ -84,9 +85,8 @@ export class ProductsService {
             lte: priceMax,
           },
           sale,
-          stock: {
-            gte: onlyStock ? 1 : 0,
-          },
+          stock,
+          discontinued,
         },
         orderBy: order,
         include: {

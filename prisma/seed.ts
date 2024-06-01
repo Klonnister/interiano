@@ -252,7 +252,8 @@ async function main() {
         size: '300ml',
         description:
           'Crema para peinar cabello liso, para dar fuerza y brillo a tu cabello.',
-        stock: 1,
+        stock: 0,
+        discontinued: true,
         price: 110,
         sale: true,
         sale_price: 100,
