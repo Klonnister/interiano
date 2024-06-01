@@ -49,6 +49,7 @@ model Product {
   extra_props   Json
   price         Decimal   @db.Decimal(6,2)
   sale          Boolean   @default(false)
+  discontinued  Boolean   @default(false)
   sale_price    Decimal   @db.Decimal(6,2) @default(0)
   applied_price Decimal?   @db.Decimal(6,2)
   design        Int
