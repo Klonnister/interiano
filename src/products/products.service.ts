@@ -110,8 +110,16 @@ export class ProductsService {
   }
 
   async getProductOptions(): Promise<ProductOptions> {
-    const categories = await this.prisma.category.findMany();
-    const trademarks = await this.prisma.trademark.findMany();
+    const categories = await this.prisma.category.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    });
+    const trademarks = await this.prisma.trademark.findMany({
+      orderBy: {
+        name: 'asc',
+      },
+    });
 
     return { categories, trademarks };
   }
