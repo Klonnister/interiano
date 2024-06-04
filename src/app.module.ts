@@ -6,7 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { ProfileModule } from './profile/profile.module';
-import { GuestModule } from './guest/guest.module';
+import { ImagesModule } from './images/images.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { GuestModule } from './guest/guest.module';
     }),
     AuthModule,
     ProfileModule,
-    GuestModule,
+    ImagesModule,
   ],
   controllers: [],
   providers: [],
