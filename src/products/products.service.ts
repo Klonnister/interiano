@@ -59,6 +59,8 @@ export class ProductsService {
             id: rawTrademark.trademark.id,
             name: rawTrademark.trademark.name,
             image: rawTrademark.trademark.image,
+            createdAt: rawTrademark.trademark.createdAt,
+            updatedAt: rawTrademark.trademark.updatedAt,
           };
         }
       })
