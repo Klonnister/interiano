@@ -10,7 +10,7 @@ export class CategoriesService {
 
   async getCategories(name: string, raw: boolean, page: number) {
     if (raw) {
-      return this.prisma.category.findMany({
+      const data = await this.prisma.category.findMany({
         where: {
           name: {
             contains: name,
@@ -20,6 +20,8 @@ export class CategoriesService {
           name: 'asc',
         },
       });
+
+      return { data };
     }
 
     return paginate(
