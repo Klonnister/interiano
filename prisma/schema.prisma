@@ -11,32 +11,32 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
-  password  String   @db.Text
-  image     String?
-  role      String   @db.TinyText
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String   @db.Text
+  image      String?
+  role       String   @db.TinyText
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  products  Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  products   Product[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("categories")
 }
 
 model Trademark {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  image     String?
-  products  Product[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  image      String?
+  products   Product[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("trademarks")
 }
@@ -59,8 +59,8 @@ model Product {
   sale_price    Decimal   @db.Decimal(6,2) @default(0)
   applied_price Decimal?   @db.Decimal(6,2)
   design        Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   @@map("products")
 }
