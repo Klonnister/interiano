@@ -5,9 +5,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { paginate } from 'src/prisma/helpers/paginator';
 import { unlinkSync } from 'fs';
 import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
-import { OrderBy } from './types/orderBy.interface';
 import { ProductOptions } from './types/productOptions.interface';
 import { Stock } from './types/stock.interface';
+import { ProductOrder } from './types/productOrder.interface';
 
 @Injectable()
 export class ProductsService {
@@ -21,7 +21,7 @@ export class ProductsService {
     priceMin: number,
     priceMax: number,
     sale: boolean,
-    order: OrderBy,
+    order: ProductOrder,
     stock: number | Stock | undefined,
     discontinued: boolean | undefined,
     page: number,

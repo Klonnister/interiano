@@ -3,12 +3,18 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Category } from '@prisma/client';
 import { CategoryDTO } from './dto/category.dto';
 import { paginate } from 'src/prisma/helpers/paginator';
+import { CategoryOrder } from './types/categoryOrder.interface';
 
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getCategories(name: string, raw: boolean, page: number) {
+  async getCategories(
+    name: string,
+    order: CategoryOrder,
+    raw: boolean,
+    page: number,
+  ) {
     if (raw) {
       const data = await this.prisma.category.findMany({
         where: {
@@ -32,9 +38,7 @@ export class CategoriesService {
             contains: name,
           },
         },
-        orderBy: {
-          name: 'asc',
-        },
+        orderBy: order,
       },
       {
         page,

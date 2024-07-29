@@ -24,12 +24,12 @@ import { ExistentProductPipe } from './pipes/existent-product.pipe';
 import getImageOptions from '../images/helpers/imageOptionsHelper';
 import { ValidImagePipe } from 'src/images/pipes/valid-image.pipe';
 import { isDeletablePath } from 'src/images/helpers/imagePathHelpers';
-import { ProductOrderByPipe } from './pipes/product-order-by.pipe';
-import { OrderBy } from './types/orderBy.interface';
 import { ProductOptions } from './types/productOptions.interface';
 import { ProductStockPipe } from './pipes/product-stock.pipe';
 import { ProductDiscontinuedPipe } from './pipes/product-discontinued.pipe';
 import { Stock } from './types/stock.interface';
+import { ProductOrderPipe } from './pipes/product-order.pipe';
+import { ProductOrder } from './types/productOrder.interface';
 
 @Controller('products')
 export class ProductsController {
@@ -79,7 +79,7 @@ export class ProductsController {
     )
     sale: boolean,
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
-    @Query('order', ProductOrderByPipe) order: OrderBy,
+    @Query('order', ProductOrderPipe) order: ProductOrder,
     @Query('stock', ProductStockPipe) stock: number | Stock | undefined,
     @Query('discontinued', ProductDiscontinuedPipe)
     discontinued: boolean | undefined,

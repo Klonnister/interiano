@@ -16,6 +16,8 @@ import { CategoryDTO } from './dto/category.dto';
 import { ValidCategoryPipe } from './pipes/valid-category.pipe';
 import { DeletableCategoryPipe } from './pipes/deletable-category.pipe';
 import { ExistentCategoryPipe } from './pipes/existent-category.pipe';
+import { CategoryOrderPipe } from './pipes/category-order.pipe';
+import { CategoryOrder } from './types/categoryOrder.interface';
 
 @Controller('categories')
 export class CategoriesController {
@@ -24,6 +26,7 @@ export class CategoriesController {
   @Get()
   getCategories(
     @Query('name') name: string,
+    @Query('order', CategoryOrderPipe) order: CategoryOrder,
     @Query(
       'raw',
       new ParseBoolPipe({
@@ -33,7 +36,7 @@ export class CategoriesController {
     raw: boolean,
     @Query('page', new ParseIntPipe({ optional: true })) page: number,
   ) {
-    return this.categoriesService.getCategories(name, raw, page);
+    return this.categoriesService.getCategories(name, order, raw, page);
   }
 
   @Get(':id')

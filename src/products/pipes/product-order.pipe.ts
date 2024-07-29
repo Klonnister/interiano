@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 
 @Injectable()
-export class ProductOrderByPipe implements PipeTransform {
+export class ProductOrderPipe implements PipeTransform {
   transform(order: string) {
     if (!order) return { created_at: 'desc' };
 
