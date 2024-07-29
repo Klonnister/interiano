@@ -16,7 +16,7 @@ export class ProductsService {
   async getProducts(
     categories: number[],
     trademarks: number[],
-    title: string,
+    name: string,
     size: string,
     priceMin: number,
     priceMax: number,
@@ -28,8 +28,8 @@ export class ProductsService {
   ) {
     const productsTrademark = await this.prisma.product.findMany({
       where: {
-        title: {
-          contains: title,
+        name: {
+          contains: name,
         },
         size: {
           contains: size,
@@ -70,8 +70,8 @@ export class ProductsService {
       this.prisma.product,
       {
         where: {
-          title: {
-            contains: title,
+          name: {
+            contains: name,
           },
           size: {
             contains: size,

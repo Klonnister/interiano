@@ -16,7 +16,7 @@ export class ProductOrderByPipe implements PipeTransform {
 
     switch (orderBy) {
       case 'name':
-        return { title: orderType };
+        return { name: orderType };
       case 'trademark':
         return { trademark: { name: orderType } };
       case 'category':

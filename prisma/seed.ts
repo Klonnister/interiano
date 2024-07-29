@@ -55,7 +55,7 @@ async function main() {
       {
         category_id: 1,
         trademark_id: 2,
-        title: 'Shampoo Control Caída, Bambú Nutre y Crece',
+        name: 'Shampoo Control Caída, Bambú Nutre y Crece',
         image: '/product-imgs/product1.webp',
         size: '400ml',
         description:
@@ -73,7 +73,7 @@ async function main() {
       {
         category_id: 1,
         trademark_id: 1,
-        title: 'Shampoo Nutrición Hair Food Aguacate Fórmula vegana',
+        name: 'Shampoo Nutrición Hair Food Aguacate Fórmula vegana',
         image: '/product-imgs/product2.webp',
         size: '300ml',
         description:
@@ -89,7 +89,7 @@ async function main() {
       {
         category_id: 2,
         trademark_id: 3,
-        title: 'Acondicionador Dermo suave y manejable. Control Caspa',
+        name: 'Acondicionador Dermo suave y manejable. Control Caspa',
         image: '/product-imgs/product3.png',
         size: '300ml',
         description:
@@ -105,8 +105,7 @@ async function main() {
       {
         category_id: 2,
         trademark_id: 2,
-        title:
-          'Acondicionador Pantene PRO-V Miracles, Colágeno. Nutre y Revitaliza',
+        name: 'Acondicionador Pantene PRO-V Miracles, Colágeno. Nutre y Revitaliza',
         image: '/product-imgs/product4.webp',
         size: '250ml',
         description:
@@ -124,8 +123,7 @@ async function main() {
       {
         category_id: 2,
         trademark_id: 3,
-        title:
-          'Acondicionador Head & Shoulders. Revitalización y Suavidad, Aceite de Argán.',
+        name: 'Acondicionador Head & Shoulders. Revitalización y Suavidad, Aceite de Argán.',
         image: '/product-imgs/product5.webp',
         size: '300ml',
         description:
@@ -141,7 +139,7 @@ async function main() {
       {
         category_id: 1,
         trademark_id: 1,
-        title: 'Shampoo Reparación Hair Food Coco Reparación.',
+        name: 'Shampoo Reparación Hair Food Coco Reparación.',
         image: '/product-imgs/product6.webp',
         size: '300ml',
         description:
@@ -159,7 +157,7 @@ async function main() {
       {
         category_id: 3,
         trademark_id: 1,
-        title: 'Crema para peinar Oil Repair 3 Recarga nutritiva.',
+        name: 'Crema para peinar Oil Repair 3 Recarga nutritiva.',
         image: '/product-imgs/product7.webp',
         size: '300ml',
         description:
@@ -177,7 +175,7 @@ async function main() {
       {
         category_id: 4,
         trademark_id: 4,
-        title: 'Crema corporal Nourishing Body Care NutriDUO',
+        name: 'Crema corporal Nourishing Body Care NutriDUO',
         image: '/product-imgs/product8.png',
         size: '300ml',
         description:
@@ -195,7 +193,7 @@ async function main() {
       {
         category_id: 4,
         trademark_id: 4,
-        title: 'Crema corporal Body Love Intensiva para piel muy seca',
+        name: 'Crema corporal Body Love Intensiva para piel muy seca',
         image: '/product-imgs/product9.jpg',
         size: '1 Litro',
         description:
@@ -213,7 +211,7 @@ async function main() {
       {
         category_id: 5,
         trademark_id: 4,
-        title: 'Desodorante Dove tono uniforme anti-manchas.',
+        name: 'Desodorante Dove tono uniforme anti-manchas.',
         image: '/product-imgs/product10.webp',
         size: '45g',
         description:
@@ -231,7 +229,7 @@ async function main() {
       {
         category_id: 5,
         trademark_id: 6,
-        title: 'Desodorante Rexona clinical Expert.',
+        name: 'Desodorante Rexona clinical Expert.',
         image: '/product-imgs/product11.webp',
         size: '46g',
         description:
@@ -247,7 +245,7 @@ async function main() {
       {
         category_id: 3,
         trademark_id: 5,
-        title: 'Crema para peinar HB Fuerza y Brillo.',
+        name: 'Crema para peinar HB Fuerza y Brillo.',
         image: '/product-imgs/product12.webp',
         size: '300ml',
         description:
@@ -264,7 +262,7 @@ async function main() {
       {
         category_id: 1,
         trademark_id: 5,
-        title: 'Shampoo Argan Oil of Morocco Repara.',
+        name: 'Shampoo Argan Oil of Morocco Repara.',
         image: '/product-imgs/product13.webp',
         size: '400ml',
         description:

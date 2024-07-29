@@ -55,7 +55,7 @@ export class ProductsController {
       }),
     )
     trademarks: number[],
-    @Query('title') title: string,
+    @Query('name') name: string,
     @Query('size') size: string,
     @Query(
       'priceMin',
@@ -87,7 +87,7 @@ export class ProductsController {
     return this.productsService.getProducts(
       categories,
       trademarks,
-      title,
+      name,
       size,
       priceMin,
       priceMax,

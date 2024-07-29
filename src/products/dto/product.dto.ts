@@ -29,7 +29,7 @@ export class productDTO {
   @MaxLength(80, {
     message: "La longitud máxima del campo 'Título' es de 40 caracteres.",
   })
-  title: string;
+  name: string;
   @IsNotEmpty({
     message: "El campo 'Imagen' no puede estar vacío.",
   })
